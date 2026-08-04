@@ -56,7 +56,7 @@
                 document.body.innerHTML = `
                     <div style="text-align: center; margin-top: 100px; font-family: sans-serif;">
                         <h2>⚠️ No Internet!</h2>
-                        <button onclick="location.reload()">Try Again</button>
+                        <button class="paper-btn" style="background-color: #0A94E8; width: 100px; color: white;" onclick="location.reload()">Try Again</button>
                     </div>
                 `;
             }
@@ -82,7 +82,8 @@
 
 
     <!-- হোম পেজ -->
-    <h2> <font Color="#007bff"> Subjects </font></h2>
+
+    <h3> <font Color="#007bff"> HSC Academic Program </font></h3>
         <div class="grid">
             <button onclick="show('physics')">
               <img src="https://i.postimg.cc/QMGyLs94/Physics-logo.avif" width="90" height="90" alt="Logo" class="rounded-img" ><br>
@@ -696,30 +697,11 @@
     <div id="english" class="sub-page">
         <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button>
         <h3>English</h3>
-        <button class="paper-btn" onclick="show('eng-1st')">1st Paper</button>
+        <a href="https://drive.google.com/drive/folders/1P3bIDqEuoXUN7sXqKzibnUTd6zGxkMyi?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">1st Paper</a>
         <button class="paper-btn"onclick="show('eng-2nd')">2nd Paper</button>
     </div>
     <div id="eng-1st" class="sub-page">
     <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('english')">← Back</button>
-    <h3>English 1st paper</h3>
-    <button class="paper-btn" onclick="show('eng1-u1')">Unit 1</button>
-    <button class="paper-btn" onclick="show('eng1-u2')">Unit 2</button>
-    <button class="paper-btn" onclick="show('eng1-u3')">Unit 3</button>
-    <button class="paper-btn" onclick="show('eng1-u4')">Unit 4</button>
-    <button class="paper-btn" onclick="show('eng1-u5')">Unit 5</button>
-    <button class="paper-btn" onclick="show('eng1-u6')">Unit 6</button>
-    <button class="paper-btn" onclick="show('eng1-u7')">Unit 7</button>
-    <button class="paper-btn" onclick="show('eng1-u8')">Unit 8</button>
-    <button class="paper-btn" onclick="show('eng1-u9')">Unit 9</button>
-    <button class="paper-btn" onclick="show('eng1-u10')">Unit 10</button>
-    <button class="paper-btn" onclick="show('eng1-t1')">Cloze test with/without clues</button>
-    <button class="paper-btn" onclick="show('eng1-t2')">Rearrange</button>
-    <button class="paper-btn" onclick="show('eng1-t3')">Theme Writting</button>
-    <button class="paper-btn" onclick="show('eng1-t4')">Completing Story</button>
-    <button class="paper-btn" onclick="show('eng1-t5')">Analyzing Graph/Chart</button>
-    <button class="paper-btn" onclick="show('eng1-t6')">Informal Letter</button>
-    <button class="paper-btn" onclick="show('eng1-t6')">Rearrange</button>
-    </div>
 
   </div>
     <div id="eng-2nd" class="sub-page">
@@ -729,7 +711,7 @@
     <button class="paper-btn" onclick="show('eng1-t2')">Preposition</button>
     <button class="paper-btn" onclick="show('eng1-t3')">Special phrase/words</button>
     <button class="paper-btn" onclick="show('eng1-t4')">Completing sentence</button>
-    <button class="paper-btn" onclick="show('eng1-t5')">Right form of vern</button>
+    <button class="paper-btn" onclick="show('eng1-t5')">Right form of verb</button>
     <button class="paper-btn" onclick="show('eng1-t6')">Narration</button>
     <button class="paper-btn" onclick="show('eng1-t7')">Changing sentence</button>
     <button class="paper-btn" onclick="show('eng1-t8')">Pronoun reference</button>
@@ -739,6 +721,61 @@
     <button class="paper-btn" onclick="show('eng1-t12')">Punctuation marks</button>
     <button class="paper-btn" onclick="show('eng1-t13')">Writting Part</button>
   </div>
+
+<div id="eng1-t1" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Aericle</h3>
+    <a href="https://drive.google.com/drive/folders/1hYcCHjsSa6Gx3S9BUMzmQ4D3_lBtYHJh?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t2" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Preposition</h3>
+    <a href="https://drive.google.com/drive/folders/1NwuLJDsETiRituTMe1In_po5KbPlOLPh?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t3" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Special phrase/words</h3>
+    <a href="https://drive.google.com/drive/folders/1Xt-Q_ge30JoHzByIqXNM0dawyuaqOqLH?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t4" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Completing sentence</h3>
+    <a href="https://drive.google.com/drive/folders/1dZyNqwnzBZaB9vkrEmc01_QeD9RWqVLW?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t5" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Right form of verb</h3>
+    <a href="https://drive.google.com/drive/folders/1oQF4h6O9AJCvXaJjXHXeNk4hwK0MXjwn?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t6" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Narration0</h3>
+    <a href="https://drive.google.com/drive/folders/19Smj4jcW3UrmxlVwdYx0wQ664965EraS?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t7" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Changing sentence</h3>
+    <a href="https://drive.google.com/drive/folders/1eRwGWVZg6gl_2o7UoVlpTF_R3xsmuP6M?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t8" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Pronoun reference</h3>
+    <a href="https://drive.google.com/drive/folders/1veCXvcXmJHnQ2jMrfc3huMxpfNJ-FXMx?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t9" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Modifier</h3>
+    <a href="https://drive.google.com/drive/folders/1F53bUoSgh0siDBJG9Ik4wzX4skRbC45M?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t10" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Connector</h3>
+    <a href="https://drive.google.com/drive/folders/1PECmbdaCqYfbU73pm6YO3-doC2PYrFBx?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t11" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Synonym or Atnonym</h3>
+    <a href="https://drive.google.com/drive/folders/1a4KFWAQvoadcDYCUsKeOO7qn-1poGEym?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t12" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Punctuation marks</h3>
+    <a href="https://drive.google.com/drive/folders/1E1mf0N9ROsPCpRtC2nTu6Kp-6DCdvA__?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div><div id="eng1-t13" class="sub-page">
+    <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button>
+    <h3>Writting Part</h3>
+    <a href="https://drive.google.com/drive/folders/1irVLx7AQGVGjL0Di-dKwocjClmzCA15b?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
+</div>
+
  <!-- ICT PART -->
     <div id="ict" class="sub-page">
         <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button>
@@ -798,14 +835,23 @@
     </div>
 
 <div id="profile" class="sub-page" style="display:none;">
-    
-    <h2>Student Profile</h2>
-    <p align="left">Name: <span id="displayname"></span></p>
-    <p align="left">User ID: <span id="displayid"></span></p>
-    <p align="left">Batch: <span id="displaybatch"></span></p>
-    <p align="left">College: <span id="displaycollege"></span></p>
+
+    <table border="1" cellspacing="0" Cellpadding="10px" align= "center">
+      <tr align= "center">
+        <th>Student Profile</th>
+      </tr>
+      <tr align= "center">
+          <td>
+          <p align="left">Name: <span id="displayname"></span></p>
+          <p align="left">User ID: <span id="displayid"></span></p>
+          <p align="left">Batch: <span id="displaybatch"></span></p>
+          <p align="left">College: <span id="displaycollege"></span></p>
+          </td>
+      </tr>
+    </table> 
     <button onclick="logout()" class="paper-btn" style="background-color: #D41564;width: 120px; color: white;">↩️ Log out</button><br>
-    <h3><fontcolor="#FF2B7E">My Result: <span id="displayresult"></span></font></h3><br><br><br>
+    <h3>My Result:</h3>
+    <p></p><span id="displayresult"></span></p><br><br>
    
     <h4>Join us on Facebook & YouTube</h4><hr>
 <a href="https://www.facebook.com/profile.php?id=61572171609595" target="_blank" style="text-decoration: none; display: block; text-align: center;">Facebook: MED Bridge Academy</a><br>
@@ -894,7 +940,7 @@ function show(pageId, isBack = false) {
         'physics-1st', 'physics-2nd', 
         'chemistry-1st', 'chemistry-2nd',
         'biology-1st', 'biology-2nd',
-        'math-1st', 'math-2nd' , 'med-ad'
+        'math-1st', 'math-2nd' , 'med-ad',  'english',  'eng-1st',  'eng-2nd'
     ];
 
     // যদি পেজটি উন্মুক্ত তালিকার বাইরে (অর্থাৎ চ্যাপ্টার) হয়, তবেই গিটহাবের পারমিশন চেক করবে
