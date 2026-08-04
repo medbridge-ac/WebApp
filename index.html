@@ -1036,12 +1036,12 @@ async function saveData() {
         }
 
         if (isValid) {
-            localStorage.setItem("isLoggedIn", "true");
-            localStorage.setItem("userName", matchedName);
-            localStorage.setItem("userId", idInput);
-            localStorage.setItem("userBatch", matchedBatch);
-            localStorage.setItem("userCollege", matchedCollege);
-            localStorage.setItem("userResult", matchedResult);
+            sessionStorage.setItem("isLoggedIn", "true");
+            sessionStorage.setItem("userName", matchedName);
+            sessionStorage.setItem("userId", idInput);
+            sessionStorage.setItem("userBatch", matchedBatch);
+            sessionStorage.setItem("userCollege", matchedCollege);
+            sessionStorage.setItem("userResult", matchedResult);
             sessionStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
 
             document.getElementById('displayname').innerText = matchedName;
