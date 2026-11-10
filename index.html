@@ -491,76 +491,86 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
 
-  async function saveData() {
-            if (!checkInternetConnection()) return;
+async function saveData() {
+    if (!checkInternetConnection()) return;
 
-            var idInput = document.getElementById('userid').value.trim().toLowerCase();
-            var githubUrl = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID?t=" + new Date().getTime();
+    var idInput = document.getElementById('userid').value.trim().toLowerCase();
+    var githubUrl = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID?t=" + new Date().getTime();
 
-            try {
-                var response = await fetch(githubUrl);
-                var text = await response.text();
-                text = text.replace(/^\uFEFF/, '');
-                var lines = text.split(/\r?\n/);
-                var isValid = false;
-                var matchedName = "", matchedBatch = "", matchedCollege = "", matchedResult = "";
-                var allowedChapters = [];
+    try {
+        var response = await fetch(githubUrl);
+        var text = await response.text();
+        text = text.replace(/^\uFEFF/, '');
+        var lines = text.split(/\r?\n/);
+        var isValid = false;
+        var matchedName = "", matchedBatch = "", matchedCollege = "", matchedResult = "";
+        var allowedChapters = [];
 
-                for (var i = 0; i < lines.length; i++) {
-                    var line = lines[i].trim();
-                    if (!line) continue;
+        for (var i = 0; i < lines.length; i++) {
+            var line = lines[i].trim();
+            if (!line) continue;
 
-                    var parts = line.split(',').map(item => item.trim());
-                    if (parts.length >= 6) {
-                        var fileDataId = parts[0].toLowerCase();
-                        if (fileDataId === idInput) {
-                            isValid = true;
-                            matchedName = parts[1]; 
-                            matchedBatch = parts[2];
-                            matchedCollege = parts[3];
-                            matchedResult = parts[4];
-                            allowedChapters = parts.slice(5);
-                            break;
-                        }
-                    }
+            var parts = line.split(',').map(item => item.trim());
+            if (parts.length >= 6) {
+                var fileDataId = parts[0].toLowerCase();
+                if (fileDataId === idInput) {
+                    isValid = true;
+                    matchedName = parts[1]; 
+                    matchedBatch = parts[2];
+                    matchedCollege = parts[3];
+                    matchedResult = parts[4];
+                    allowedChapters = parts.slice(5);
+                    break;
                 }
-
-                if (isValid) {
-                    localStorage.setItem("isLoggedIn", "true");
-                    localStorage.setItem("userName", matchedName);
-                    localStorage.setItem("userId", idInput);
-                    localStorage.setItem("userBatch", matchedBatch);
-                    localStorage.setItem("userCollege", matchedCollege);
-                    localStorage.setItem("userResult", matchedResult);
-                    localStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
-
-                    // --- এই অংশটুকু নতুন যোগ করতে হবে ---
-                    fetch(SCRIPT_URL, {
-                        method: "POST",
-                        headers: { "Content-Type": "text/plain;charset=utf-8" },
-                        body: JSON.stringify({
-                            action: "recordLogin",
-                            id: idInput
-                        })
-                    }).catch(err => console.error("Login record error:", err));
-                    // ---------------------------------
-
-                    document.getElementById('displayname').innerText = matchedName;
-                    document.getElementById('displayid').innerText = maskUserId(idInput);
-                    document.getElementById('displaybatch').innerText = matchedBatch; 
-                    document.getElementById('displaycollege').innerText = matchedCollege; 
-                    document.getElementById('displayresult').innerText = matchedResult; 
-
-                    document.getElementById('login-screen').style.display = 'none';
-                    document.getElementById('home').style.display = 'block';
-                } else {
-                    alert("Wrong ID");
-                }
-            } catch (error) {
-                console.error(error);
-                alert("Internet Problem!");
             }
         }
+
+        if (!isValid) {
+            alert("Wrong ID");
+            return;
+        }
+
+        // ১. এই ব্রাউজার/ফোনের জন্য একটি ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
+        let deviceId = localStorage.getItem("device_uuid");
+        if (!deviceId) {
+            deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+            localStorage.setItem("device_uuid", deviceId);
+        }
+
+        // ২. গুগল শিটে চেক করা যে I কলামে অলরেডি অন্য কোনো ডিভাইস আইডি আছে কিনা
+        let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
+        let checkRes = await fetch(checkUrl);
+        let checkData = await checkRes.json();
+
+        if (checkData.status === "blocked") {
+            alert("❌ এই আইডিটি ইতিমধ্যে অন্য একটি ফোনে লগইন করা আছে! একটি আইডি দিয়ে একাধিক ফোনে প্রবেশ করা নিষেধ।");
+            return;
+        }
+
+        // ৩. সফল হলে লোকাল স্টোরেজে সেভ করা
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userName", matchedName);
+        localStorage.setItem("userId", idInput);
+        localStorage.setItem("userBatch", matchedBatch);
+        localStorage.setItem("userCollege", matchedCollege);
+        localStorage.setItem("userResult", matchedResult);
+        localStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
+
+        document.getElementById('displayname').innerText = matchedName;
+        document.getElementById('displayid').innerText = maskUserId(idInput);
+        document.getElementById('displaybatch').innerText = matchedBatch; 
+        document.getElementById('displaycollege').innerText = matchedCollege; 
+        document.getElementById('displayresult').innerText = matchedResult; 
+
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('home').style.display = 'block';
+
+    } catch (error) {
+        console.error(error);
+        alert("Internet Problem!");
+    }
+}
+
         document.addEventListener("DOMContentLoaded", function() {
             var buttons = document.querySelectorAll('button');
             buttons.forEach(function(btn) {
