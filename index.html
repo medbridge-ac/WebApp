@@ -491,7 +491,7 @@ document.addEventListener("DOMContentLoaded", function() {
         });
 
 
-        async function saveData() {
+  async function saveData() {
             if (!checkInternetConnection()) return;
 
             var idInput = document.getElementById('userid').value.trim().toLowerCase();
@@ -534,6 +534,17 @@ document.addEventListener("DOMContentLoaded", function() {
                     localStorage.setItem("userResult", matchedResult);
                     localStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
 
+                    // --- এই অংশটুকু নতুন যোগ করতে হবে ---
+                    fetch(SCRIPT_URL, {
+                        method: "POST",
+                        headers: { "Content-Type": "text/plain;charset=utf-8" },
+                        body: JSON.stringify({
+                            action: "recordLogin",
+                            id: idInput
+                        })
+                    }).catch(err => console.error("Login record error:", err));
+                    // ---------------------------------
+
                     document.getElementById('displayname').innerText = matchedName;
                     document.getElementById('displayid').innerText = maskUserId(idInput);
                     document.getElementById('displaybatch').innerText = matchedBatch; 
@@ -550,7 +561,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 alert("Internet Problem!");
             }
         }
-
         document.addEventListener("DOMContentLoaded", function() {
             var buttons = document.querySelectorAll('button');
             buttons.forEach(function(btn) {
@@ -618,7 +628,7 @@ function show(pageId, isBack = false) {
         }
 
         // Q&A SCRIPT
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx0X0-CY1uSTUv8GfWNCSc8S6UI0EjVUeVAR8-nDGciMA110fMFNj4VFUFm629_SsagVg/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz60b962sSwdhhMLpqhdg0C1t55gTTXaOwsUvGYtgX1Thq5nAtMHsKOuGd1BDbD19atug/exec";
 
         function getQAStudent() {
             return {
