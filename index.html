@@ -530,15 +530,15 @@ async function saveData() {
             return;
         }
 
-        // ১. এই ব্রাউজার/ফোনের জন্য একটি ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
+        // ব্রাউজারের জন্য ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
         let deviceId = localStorage.getItem("device_uuid");
         if (!deviceId) {
             deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
             localStorage.setItem("device_uuid", deviceId);
         }
 
-        // ২. গুগল শিটে চেক করা যে I কলামে অলরেডি অন্য কোনো ডিভাইস আইডি আছে কিনা
-        let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
+        // সার্ভারে আইডি, ডিভাইস কোড এবং নাম পাঠানো
+        let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}&name=${encodeURIComponent(matchedName)}`;
         let checkRes = await fetch(checkUrl);
         let checkData = await checkRes.json();
 
@@ -547,7 +547,7 @@ async function saveData() {
             return;
         }
 
-        // ৩. সফল হলে লোকাল স্টোরেজে সেভ করা
+        // সফলভাবে লগইন হলে লোকাল স্টোরেজে সেভ করা
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userName", matchedName);
         localStorage.setItem("userId", idInput);
@@ -638,7 +638,7 @@ function show(pageId, isBack = false) {
         }
 
         // Q&A SCRIPT
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJVKotJMOZ3fTtLlBPQUNLKs16b79ceM_aBHBFrShAh3E1dPowF2LmSq0v1BGedKhqpQ/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwT-pxhxQO0vtDa38gz8-m4zZGpi5NuvYb57kew1Vl1s81s4_IpVDwEH0BAJSJGl5vW/exec";
 
         function getQAStudent() {
             return {
