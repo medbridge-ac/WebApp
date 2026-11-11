@@ -5,19 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MED Bridge Academy</title>
     <style>
-        body { font-family: sans-serif; margin: 0; padding: 0; background:#FAFAFA; text-align: center; padding-bottom: 70px; 
+        body { font-family: sans-serif; margin: 0; padding: 0px; background:#FAFAFA; text-align: center; padding-bottom: 30px; 
         background-image: url('https://i.postimg.cc/76SsNhfF/Clean-Medical-Letterhead-with-Blue-Accents.png');
             background-size: cover; background-repeat: no-repeat; background-position: center; background-attachment: fixed; }
         header { height: 100px; width: auto; background: radial-gradient(#044E8A, #004a99, #007bff, #004a99); color: white; padding: 20px; border-radius: 0 0 20px 20px; }
         header img { height: 200px; width: 200px; display: block; margin: 0 auto 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; }
-        button { justify-content: center; gap: 15px; font-size:14px; padding: 0px; border: none; height: 120px; border-radius: 5px; background:#C5EDFF; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 0px; }
+        button { justify-content: center; gap: 15px; font-size:14px; padding: 0px; border: none; height: 120px;  border-radius: 5px; background:#C5EDFF; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; }
         .sub-page { display: none; padding: 20px; }
         .paper-btn {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             width: 200px; margin: 10px auto; padding: 8px; background: #007bff; color: white;
             border-radius: 5px; border: none; font-size: 16px; cursor: pointer; height: auto; 
         }
+        .sub-page { 
+    display: none; 
+    padding: 8px; /* আগের 20px থেকে কমিয়ে দেওয়া হলো */
+}
         #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background:#FAFAFA; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
         #login-screen input { padding: 12px; margin: 8px; width: 80%; border: 1px solid #ccc; border-radius: 5px; }
         .bottom-nav { position: fixed; bottom: 0; left: 0; border-radius: 5px; width: 100%; height: 50px; color: white; background-color:#034587; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #ddd; z-index: 1000; }
@@ -25,8 +29,8 @@
         .dot { display: none; height: 10px; width: 10px; background-color: red; border-radius: 50%; position: absolute; top: 5px; right: 57%; z-index: 500; }
         .rounded-img { border-radius: 5px; }
 
-        .qa-container { max-width: 600px; margin: 15px auto; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); color: #333; }
-        .qa-header { border-bottom: 2px solid #eee; margin-bottom: 20px; padding-bottom: 10px; }
+        .qa-container { width: 100%; margin: 4px auto; background: #fff; padding: 0px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); color: #333; }
+        .qa-header { border-bottom: 2px solid #eee; margin-bottom: 10px; padding-bottom: 5px; }
         .qa-header h2 { color: #007bff; font-size: 20px; margin: 0; }
         .qa-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
         .qa-tab { flex: 1; padding: 10px; border: none; height: 50px; border-radius: 6px; background: #e0e0e0; font-weight: bold; cursor: pointer; }
@@ -67,7 +71,34 @@
         <input type="text" id="userid" placeholder="User ID">
         <button class="paper-btn" style="background-color: #0A94E8; width: 100px; color: white;" onclick="saveData()">Log in</button>
     </div>
+<!-- চ্যাট আইকন (Floating Button: ক্লিক করলে চ্যাট সাব-পেইজ ওপেন হবে) -->
+<div onclick="show('chat-portal')" style="position:fixed; bottom:420px; right:10px; background:black; color:#ffffff; padding:6px 10px; border-radius:15px; cursor:pointer; z-index:999; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
+    <font size="2">Messages ➤</font>
+</div>
+
+
+<!-- CHAT PORTAL SUB-PAGE (চ্যাট সাব-পেইজ সেকশন) -->
+<div id="chat-portal" class="sub-page" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #fafafa; z-index: 1500; box-sizing: border-box; padding: 10px; flex-direction: column;">
+    <!-- টপ বার ও ব্যাক বাটন -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-shrink: 0;">
+        <button class="paper-btn" style="background-color: #E3E3E3; color: black; margin: 0; width: 70px; height: 35px; font-size: 14px;" onclick="show('home')">← Back</button>
+        <h3 id="chatHeaderTitle" style="margin: 0; font-size: 16px; color: #007bff;">ব্যাচ চ্যাট রুম</h3>
+    </div>
     
+    <!-- চ্যাট মেসেজ দেখানোর এরিয়া (এটি ওপর-নিচে স্ক্রোল হবে) -->
+    <div id="chatMessages" style="flex: 1; padding: 10px; overflow-y: auto; font-size: 13px; background: #fff; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; text-align: left;">
+        লোড হচ্ছে...
+    </div>
+
+    <!-- ইনপুট ও সেন্ড বাটন (স্ক্রিনের নিচে স্থায়ী/ফিক্সড থাকবে) -->
+    <div style="display: flex; gap: 8px; background: #fff; padding: 8px; border: 1px solid #ddd; border-radius: 8px; flex-shrink: 0;">
+        <input type="text" id="chatInput" placeholder="আপনার মেসেজ লিখুন..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 14px;" onkeypress="handleChatKeyPress(event)">
+        <button onclick="sendChatMessage()" style="padding: 0 16px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; height: 40px;">পাঠাও</button>
+    </div>
+</div>
+
+
+
    <div id="home" class="sub-page">
     <header>
         <img src="https://i.postimg.cc/HsFq06kn/1000013989-Photoroom.png" alt="Logo" style="height: 60px; width: auto;">
@@ -76,14 +107,14 @@
 
     <h2><font color="#007bff" face="Cambria">HSC Academic Program</font></h2>
         <div class="grid">
-            <button onclick="show('physics')"><img src="https://i.postimg.cc/QMGyLs94/Physics-logo.avif" width="90" height="90" alt="Logo" class="rounded-img"><br>Physics</button>
-            <button onclick="show('chemistry')"><img src="https://i.postimg.cc/RZn8HZJ1/Chemistry-logo.jpg" width="90" height="90" alt="Logo" class="rounded-img"><br>Chemistry</button>
-            <button onclick="show('biology')"><img src="https://i.postimg.cc/JnVsxc81/Biology-logo.jpg" width="90" height="90" alt="Logo" class="rounded-img"><br>Biology</button>
-            <button onclick="show('math')"><img src="https://i.postimg.cc/wTvjhbNF/Math-logo.jpg" width="90" height="90" alt="Logo" class="rounded-img"><br>Higher Math</button>
-            <button onclick="show('bangla')"><img src="https://i.postimg.cc/TYzvpkJW/Bangla-logo.png" width="90" height="90" alt="Logo" class="rounded-img"><br>Bangla</button>
-            <button onclick="show('english')"><img src="https://i.postimg.cc/s1FHDLCz/English-logo.jpg" width="90" height="90" alt="Logo" class="rounded-img"><br>English</button>
-            <button onclick="show('ict')"><img src="https://i.postimg.cc/T2bZBjX9/ICT-logo.avif" width="90" height="90" alt="Logo" class="rounded-img"><br>ICT</button>
-            <button onclick="show('med-ad')"><img src="https://i.postimg.cc/W1y82KGG/Medical-Logo.jpg" width="90" height="90" alt="Logo" class="rounded-img"><br>Medical</button>
+            <button onclick="show('physics')"><img src="https://i.postimg.cc/QMGyLs94/Physics-logo.avif" width="110" height="90" alt="Logo" class="rounded-img"><br>Physics</button>
+            <button onclick="show('chemistry')"><img src="https://i.postimg.cc/RZn8HZJ1/Chemistry-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Chemistry</button>
+            <button onclick="show('biology')"><img src="https://i.postimg.cc/JnVsxc81/Biology-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Biology</button>
+            <button onclick="show('math')"><img src="https://i.postimg.cc/wTvjhbNF/Math-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Higher Math</button>
+            <button onclick="show('bangla')"><img src="https://i.postimg.cc/TYzvpkJW/Bangla-logo.png" width="110" height="90" alt="Logo" class="rounded-img"><br>Bangla</button>
+            <button onclick="show('english')"><img src="https://i.postimg.cc/s1FHDLCz/English-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>English</button>
+            <button onclick="show('ict')"><img src="https://i.postimg.cc/T2bZBjX9/ICT-logo.avif" width="110" height="90" alt="Logo" class="rounded-img"><br>ICT</button>
+            <button onclick="show('med-ad')"><img src="https://i.postimg.cc/W1y82KGG/Medical-Logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Medical</button>
         </div><br><hr>
         <div>
             <p>MED Bridge Academy <br> Contact: +8801612296263</p>
@@ -459,7 +490,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 'physics-1st', 'physics-2nd', 
                 'chemistry-1st', 'chemistry-2nd',
                 'biology-1st', 'biology-2nd',
-                'math-1st', 'math-2nd', 'med-ad', 'english', 'eng-1st', 'eng-2nd', 'qa-portal'
+                'math-1st', 'math-2nd', 'chat-portal', 'med-ad', 'english', 'eng-1st', 'eng-2nd', 'qa-portal'
             ];
 
             if (!openPages.includes(pageId)) {
@@ -530,15 +561,15 @@ async function saveData() {
             return;
         }
 
-        // ব্রাউজারের জন্য ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
+        // ১. এই ব্রাউজার/ফোনের জন্য একটি ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
         let deviceId = localStorage.getItem("device_uuid");
         if (!deviceId) {
             deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
             localStorage.setItem("device_uuid", deviceId);
         }
 
-        // সার্ভারে আইডি, ডিভাইস কোড এবং নাম পাঠানো
-        let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}&name=${encodeURIComponent(matchedName)}`;
+        // ২. গুগল শিটে চেক করা যে I কলামে অলরেডি অন্য কোনো ডিভাইস আইডি আছে কিনা
+        let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
         let checkRes = await fetch(checkUrl);
         let checkData = await checkRes.json();
 
@@ -547,7 +578,7 @@ async function saveData() {
             return;
         }
 
-        // সফলভাবে লগইন হলে লোকাল স্টোরেজে সেভ করা
+        // ৩. সফল হলে লোকাল স্টোরেজে সেভ করা
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("userName", matchedName);
         localStorage.setItem("userId", idInput);
@@ -555,6 +586,7 @@ async function saveData() {
         localStorage.setItem("userCollege", matchedCollege);
         localStorage.setItem("userResult", matchedResult);
         localStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
+        
 
         document.getElementById('displayname').innerText = matchedName;
         document.getElementById('displayid').innerText = maskUserId(idInput);
@@ -612,33 +644,71 @@ window.addEventListener('load', function() {
     .catch(err => console.error("Notice error:", err));
 });
 function show(pageId, isBack = false) {
-            if (!checkInternetConnection()) return;
+    if (!checkInternetConnection()) return;
 
-            // ... আগের বাকি কোডগুলো যেমন আছে থাকবে ...
+    let openPages = [
+        'home', 'notice', 'profile', 'bangla',
+        'chemistry', 'physics', 'biology', 'math', 'ict',
+        'physics-1st', 'physics-2nd', 
+        'chemistry-1st', 'chemistry-2nd',
+        'biology-1st', 'biology-2nd',
+        'math-1st', 'math-2nd', 'chat-portal', 'med-ad', 'english', 'eng-1st', 'eng-2nd', 'qa-portal'
+    ];
 
-            document.querySelectorAll('.sub-page').forEach(div => div.style.display = 'none');
-            document.getElementById(pageId).style.display = 'block';
-            localStorage.setItem('currentActivePage', pageId);
-
-            // ইউজার নোটিশ পেজে গেলে লাল ডট হাইড হয়ে যাবে এবং নোটিশ সিন হয়ে যাবে
-            if (pageId === 'notice') {
-                document.getElementById('notice-dot').style.display = 'none';
-                let currentNotice = document.getElementById('noticeContent').innerText;
-                if (currentNotice) {
-                    localStorage.setItem('lastSeenNotice', currentNotice);
-                }
-            }
-
-            if (!isBack) {
-                if (pageHistory[pageHistory.length - 1] !== pageId) {
-                    pageHistory.push(pageId);
-                }
-                history.pushState({page: pageId}, "");
-            }
+    if (!openPages.includes(pageId)) {
+        let allowed = JSON.parse(localStorage.getItem("userAllowedChapters") || "[]");
+        if (!allowed.includes("all") && !allowed.includes(pageId)) {
+            alert("Not available for you");
+            return;
         }
+    }
+
+    document.querySelectorAll('.sub-page').forEach(div => div.style.display = 'none');
+    document.getElementById(pageId).style.display = 'block';
+    localStorage.setItem('currentActivePage', pageId);
+
+    // ১. চ্যাট পেজে প্রবেশ করলে বটম নেভ বার হাইড হবে, অন্য পেজে থাকলে শোগ করবে
+    let bottomNav = document.querySelector('.bottom-nav');
+    if (bottomNav) {
+        if (pageId === 'chat-portal') {
+            bottomNav.style.display = 'none';
+        } else {
+            bottomNav.style.display = 'flex';
+        }
+    }
+
+    // ইউজার নোটিশ পেজে গেলে লাল ডট হাইড হয়ে যাবে এবং নোটিশ সিন হয়ে যাবে
+    if (pageId === 'notice') {
+        document.getElementById('notice-dot').style.display = 'none';
+        let currentNotice = document.getElementById('noticeContent').innerText;
+        if (currentNotice) {
+            localStorage.setItem('lastSeenNotice', currentNotice);
+        }
+    }
+
+    // চ্যাট পেজে গেলে ব্যাচের নাম সেট হবে এবং মেসেজ লোড হবে
+    if (pageId === 'chat-portal') {
+        let userBatch = localStorage.getItem("userBatch") || "General";
+        document.getElementById('chatHeaderTitle').innerText = "Batch:" + userBatch;
+        loadBatchMessages();
+    }
+    // চ্যাট পেজের জন্য flex এবং অন্য পেজের জন্য block হবে
+    if (pageId === 'chat-portal') {
+        document.getElementById(pageId).style.display = 'flex';
+    } else {
+        document.getElementById(pageId).style.display = 'block';
+    }
+
+    if (!isBack) {
+        if (pageHistory[pageHistory.length - 1] !== pageId) {
+            pageHistory.push(pageId);
+        }
+        history.pushState({page: pageId}, "");
+    }
+}
 
         // Q&A SCRIPT
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwT-pxhxQO0vtDa38gz8-m4zZGpi5NuvYb57kew1Vl1s81s4_IpVDwEH0BAJSJGl5vW/exec";
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJVKotJMOZ3fTtLlBPQUNLKs16b79ceM_aBHBFrShAh3E1dPowF2LmSq0v1BGedKhqpQ/exec";
 
         function getQAStudent() {
             return {
@@ -757,7 +827,7 @@ function show(pageId, isBack = false) {
     }
 
     const listDiv = document.getElementById('answersList');
-    listDiv.innerText = "লোড হচ্ছে...";
+    listDiv.innerText = "Loading";
 
     fetch(`${SCRIPT_URL}?action=getStudentQA&id=${encodeURIComponent(student.id)}`)
     .then(res => res.json())
@@ -782,7 +852,7 @@ function show(pageId, isBack = false) {
                     let id = m ? (m[1] || m[2]) : null;
                     if (id) sImg = `https://lh3.googleusercontent.com/d/${id}`;
                 }
-                studentImgHtml = `<p style="margin-top:10px;"><strong>সংযুক্ত ছবি:</strong><br><a href="${item.imageUrl}" target="_blank"><img src="${sImg}" style="max-width:200px; border-radius:6px; border:1px solid #ddd;"></a></p>`;
+                studentImgHtml = `<p style="margin-top:10px;"><br><a href="${item.imageUrl}" target="_blank"><img src="${sImg}" style="max-width:200px; border-radius:6px; border:1px solid #ddd;"></a></p>`;
             }
 
             // শিক্ষকের উত্তরের টেক্সট থেকে লিংক খুঁজে ছবি আকারে দেখানো
@@ -821,6 +891,82 @@ window.addEventListener('load', function() {
         loader.classList.add('loader-hidden');
     }, 1800); // পেজ লোড হওয়ার পর আধ সেকেন্ড রেখে তারপর মিলিয়ে যাবে
 });
+
+// চ্যাট শিটের নতুন অ্যাপস স্ক্রিপ্ট ইউআরএল
+const CHAT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxL5l3yW2VaeBbgksUVALicC0WN-toOdHVBDxpSzulV8KrcxKpKWutJyD8_UUML0j1VBg/exec";
+
+// ১. চ্যাট মেসেজ লোড করার ফাংশন
+async function loadBatchMessages() {
+    let batch = localStorage.getItem("userBatch") || "";
+    try {
+        let res = await fetch(`${CHAT_SCRIPT_URL}?action=getMessages&batch=${encodeURIComponent(batch)}`);
+        let data = await res.json();
+        
+        let chatBox = document.getElementById('chatMessages');
+        chatBox.innerHTML = "";
+        
+        if (!Array.isArray(data) || data.length === 0) {
+            chatBox.innerHTML = "<p style='text-align:center; color:#888; margin-top:20px;'> No message!</p>";
+            return;
+        }
+
+        data.forEach(msg => {
+            chatBox.innerHTML += `
+                <div style="margin-bottom: 10px; background: #fff; padding: 10px 12px; border-radius: 6px; border: 1px solid #eee; text-align: left;">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                        <b style="color:#007bff;">${msg.name}</b> 
+                        <span style="font-size: 11px; color: #888;">(${msg.batch})</span>
+                    </div>
+                    <span style="font-size: 14px; color: #333; word-break: break-all;">${msg.message}</span>
+                    <div style="font-size: 10px; color: gray; text-align: right; margin-top:4px;">${msg.time}</div>
+                </div>`;
+        });
+        chatBox.scrollTop = chatBox.scrollHeight;
+    } catch (e) {
+        console.error("Chat load error:", e);
+        document.getElementById('chatMessages').innerHTML = "<p style='color:red; text-align:center;'>Something wrong!</p>";
+    }
+}
+
+// ২. চ্যাট মেসেজ পাঠানোর ফাংশন
+async function sendChatMessage() {
+    let input = document.getElementById('chatInput');
+    let msg = input.value.trim();
+    if (!msg) return;
+
+    let payload = {
+        action: "sendMessage",
+        id: localStorage.getItem("userId") || "unknown",
+        name: localStorage.getItem("userName") || "Student",
+        batch: localStorage.getItem("userBatch") || "",
+        message: msg
+    };
+
+    try {
+        let res = await fetch(CHAT_SCRIPT_URL, {
+            method: "POST",
+            body: JSON.stringify(payload)
+        });
+        let result = await res.json();
+        
+        if (result.status === "success") {
+            input.value = "";
+            loadBatchMessages();
+        }
+    } catch (e) {
+        console.error("Send error:", e);
+        alert("Not sent");
+    }
+}
+
+// ৩. এন্টার প্রেস করলে সেন্ড করার ফাংশন
+function handleChatKeyPress(event) {
+    if (event.key === 'Enter') {
+        sendChatMessage();
+    }
+}
+
+
     </script>
     <style>#illusion-loader {
     position: fixed;
@@ -895,7 +1041,8 @@ window.addEventListener('load', function() {
 .loader-hidden {
     opacity: 0;
     visibility: hidden;
-}</style>
+}
+</style>
 
 <div id="illusion-loader">
     <div class="loader-content">
@@ -904,6 +1051,7 @@ window.addEventListener('load', function() {
         <div class="illusion-ring"></div>
     </div>
 </div>
+
 
     
 </body>
