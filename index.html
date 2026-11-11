@@ -2,60 +2,162 @@
 <html lang="bn">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>MED Bridge Academy</title>
     <style>
-        body { font-family: sans-serif; margin: 0; padding: 0px; background:#FAFAFA; text-align: center; padding-bottom: 30px; 
-        background-image: url('https://i.postimg.cc/76SsNhfF/Clean-Medical-Letterhead-with-Blue-Accents.png');
-            background-size: cover; background-repeat: no-repeat; background-position: center; background-attachment: fixed; }
-        header { height: 100px; width: auto; background: radial-gradient(#044E8A, #004a99, #007bff, #004a99); color: white; padding: 20px; border-radius: 0 0 20px 20px; }
-        header img { height: 200px; width: 200px; display: block; margin: 0 auto 10px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; padding: 0px; }
-        button { justify-content: center; gap: 15px; font-size:14px; padding: 0px; border: none; height: 120px;  border-radius: 5px; background:#C5EDFF; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; }
-        .sub-page { display: none; padding: 20px; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            margin: 0; 
+            padding: 0; 
+            background: #f4f6f9; 
+            color: #333; 
+            text-align: center; 
+            padding-bottom: 70px; 
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* হেডার ডিজাইন */
+        header { 
+            background: linear-gradient(135deg, #044E8A, #007bff); 
+            color: white; 
+            padding: 25px 15px 20px; 
+            border-radius: 0 0 24px 24px; 
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.2);
+        }
+        header img { height: 75px; width: auto; display: block; margin: 0 auto 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
+        header h2 { margin: 0; font-size: 20px; letter-spacing: 0.5px; }
+
+        /* মেইন গ্রিড লেআউট */
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 12px; 
+            padding: 15px; 
+        }
+        .grid button { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px; 
+            font-weight: 600;
+            color: #2c3e50;
+            padding: 10px; 
+            border: none; 
+            height: 115px;  
+            border-radius: 12px; 
+            background: #ffffff; 
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06); 
+            cursor: pointer; 
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+        }
+        .grid button:active { transform: scale(0.96); }
+        .grid button img { margin-bottom: 6px; border-radius: 8px; object-fit: cover; }
+
+        .sub-page { display: none; padding: 15px; animation: fadeIn 0.2s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .paper-btn {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            width: 200px; margin: 10px auto; padding: 8px; background: #007bff; color: white;
-            border-radius: 5px; border: none; font-size: 16px; cursor: pointer; height: auto; 
+            width: 100%; max-width: 320px; margin: 10px auto; padding: 12px; background: #007bff; color: white;
+            border-radius: 10px; border: none; font-size: 15px; font-weight: 600; cursor: pointer; height: auto; 
+            box-shadow: 0 2px 6px rgba(0,123,255,0.25);
+            transition: background 0.2s;
         }
-        .sub-page { 
-    display: none; 
-    padding: 8px; /* আগের 20px থেকে কমিয়ে দেওয়া হলো */
-}
-        #login-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background:#FAFAFA; z-index: 2000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #login-screen input { padding: 12px; margin: 8px; width: 80%; border: 1px solid #ccc; border-radius: 5px; }
-        .bottom-nav { position: fixed; bottom: 0; left: 0; border-radius: 5px; width: 100%; height: 50px; color: white; background-color:#034587; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #ddd; z-index: 1000; }
-        .nav-item { text-align: center; font-size: 15px; cursor: pointer; padding: 5px; }
-        .dot { display: none; height: 10px; width: 10px; background-color: red; border-radius: 50%; position: absolute; top: 5px; right: 57%; z-index: 500; }
-        .rounded-img { border-radius: 5px; }
+        .paper-btn:active { background: #0056b3; }
 
-        .qa-container { width: 100%; margin: 4px auto; background: #fff; padding: 0px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.08); color: #333; }
-        .qa-header { border-bottom: 2px solid #eee; margin-bottom: 10px; padding-bottom: 5px; }
-        .qa-header h2 { color: #007bff; font-size: 20px; margin: 0; }
-        .qa-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
-        .qa-tab { flex: 1; padding: 10px; border: none; height: 50px; border-radius: 6px; background: #e0e0e0; font-weight: bold; cursor: pointer; }
+        /* লগইন স্ক্রিন */
+        #login-screen { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: #ffffff; z-index: 2000; display: flex; flex-direction: column; 
+            justify-content: center; align-items: center; padding: 20px; 
+        }
+        #login-screen img { height: 100px; width: auto; margin-bottom: 15px; }
+        #login-screen h2 { color: #044E8A; margin-bottom: 20px; font-size: 24px; }
+        #login-screen input { 
+            padding: 14px 16px; margin: 8px 0; width: 100%; max-width: 300px; 
+            border: 1px solid #dcedc8; border-radius: 10px; font-size: 16px; background: #f9f9f9; outline: none;
+            transition: border-color 0.2s;
+        }
+        #login-screen input:focus { border-color: #007bff; background: #fff; }
+
+        /* বটম নেভবার */
+        .bottom-nav { 
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; 
+            color: white; background: #ffffff; display: flex; justify-content: space-around; 
+            align-items: center; border-top: 1px solid #eaeaea; z-index: 1000; 
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        .nav-item { text-align: center; font-size: 12px; color: #666; cursor: pointer; padding: 5px; flex: 1; position: relative; font-weight: 500; }
+        .nav-item span { font-size: 20px; display: block; margin-bottom: 2px; }
+        .nav-item.active, .nav-item:active { color: #007bff; }
+        .dot { display: none; height: 9px; width: 9px; background-color: #ff3b30; border-radius: 50%; position: absolute; top: 6px; right: 32%; z-index: 500; border: 1px solid #fff; }
+
+        .rounded-img { border-radius: 8px; }
+
+        /* Q&A ও চ্যাট কন্টেইনার */
+        .qa-container { width: 100%; max-width: 500px; margin: 0 auto; background: #fff; padding: 15px; border-radius: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); color: #333; text-align: left; }
+        .qa-header { border-bottom: 1px solid #eee; margin-bottom: 15px; padding-bottom: 8px; }
+        .qa-header h2 { color: #007bff; font-size: 18px; margin: 0; }
+        .qa-tabs { display: flex; gap: 8px; margin-bottom: 15px; }
+        .qa-tab { flex: 1; padding: 10px; border: none; height: 42px; border-radius: 8px; background: #f1f3f5; font-weight: 600; cursor: pointer; font-size: 14px; color: #555; }
         .qa-tab.active { background: #007bff; color: white; }
         .qa-tab-content { display: none; }
         .qa-tab-content.active { display: block; }
-        .qa-container label { display: block; margin-top: 12px; font-weight: bold; font-size: 14px; text-align: left; }
-        .qa-container textarea { width: 100%; height: 100px; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; resize: vertical; box-sizing: border-box; }
+        .qa-container label { display: block; margin-top: 10px; font-weight: 600; font-size: 13px; color: #444; }
+        .qa-container textarea { width: 100%; height: 90px; padding: 12px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; resize: none; box-sizing: border-box; font-size: 14px; outline: none; }
         .qa-image-buttons { display: flex; gap: 10px; margin-top: 8px; }
-        .qa-image-buttons button { flex: 1; padding: 10px; border: none; border-radius: 6px; color: white; background: #007bff; cursor: pointer; height: 45px; }
+        .qa-image-buttons button { flex: 1; padding: 10px; border: none; border-radius: 8px; color: white; background: #007bff; cursor: pointer; height: 40px; font-size: 13px; font-weight: 500; }
         .qa-image-buttons button:last-child { background: #6c757d; }
-        #selectedFileName { font-size: 13px; color: #666; margin-top: 8px; text-align: left; }
-        .qa-submit-btn { width: 100%; height: 50px; margin-top: 15px; background: #28a745; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer; }
-        .qa-card { background: #f9f9f9; padding: 12px; border-left: 4px solid #007bff; border-radius: 4px; margin-bottom: 12px; text-align: left; overflow-wrap: anywhere; }
-        .qa-card img { max-width: 100%; height: auto; margin-top: 8px; border-radius: 4px; }
-        .qa-card a { color: #007bff; }
-        .status-pending { color: #d9534f; font-weight: bold; }
+        #selectedFileName { font-size: 12px; color: #666; margin-top: 6px; }
+        .qa-submit-btn { width: 100%; height: 45px; margin-top: 15px; background: #28a745; color: white; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; }
+
+        /* ফ্লোটিং চ্যাট বাটন */
+        .chat-float-btn {
+            position: fixed; top: 14px; right: 15px; background: #111; color: #fff; 
+            padding: 3px 3px; border-radius: 20px; cursor: pointer; z-index: 999; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 12px; font-weight: 600;
+            display: flex; align-items: center; gap: 4px;
+        }
+
+        /* প্রোফাইল টেবিল স্টাইল */
+        .profile-card {
+            background: #ffffff; border-radius: 12px; padding: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            margin-bottom: 15px; text-align: left; border: 1px solid #eaeaea;
+        }
+        .profile-card p { margin: 8px 0; font-size: 14px; color: #444; }
+        .profile-card p span { font-weight: 600; color: #111; }
+
+        /* লোডার ডিজাইন */
+        #illusion-loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0f172a; display: flex; justify-content: center; align-items: center;
+            z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-content { display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; }
+        .loader-img {
+            width: 100px; height: 100px; object-fit: cover; border-radius: 50%;
+            border: 3px solid #007bff; box-shadow: 0 0 15px rgba(0, 123, 255, 0.4);
+            margin-bottom: 25px; animation: fadeInScale 1.2s ease-in-out infinite alternate;
+        }
+        .loader-text { color: #ffffff; font-size: 16px; font-weight: 600; letter-spacing: 0.5px; }
+        .illusion-ring {
+            width: 124px; height: 124px; position: absolute; top: -12px;
+            border: 4px solid transparent; border-top-color: #007bff; border-bottom-color: #ff007b;
+            border-radius: 50%; animation: illusionSpin 1.2s linear infinite; pointer-events: none;
+        }
+        @keyframes illusionSpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes fadeInScale { 0% { transform: scale(0.92); opacity: 0.7; } 100% { transform: scale(1.05); opacity: 1; } }
+        .loader-hidden { opacity: 0; visibility: hidden; }
     </style>
     <script>
         window.addEventListener('load', function() {
             if (!navigator.onLine) {
                 document.body.innerHTML = `
-                    <div style="text-align: center; margin-top: 100px; font-family: sans-serif;">
-                        <h2>⚠️ No Internet!</h2>
-                        <button class="paper-btn" style="background-color: #0A94E8; width: 100px; color: white;" onclick="location.reload()">Try Again</button>
+                    <div style="text-align: center; margin-top: 150px; font-family: sans-serif; padding: 20px;">
+                        <h2 style="color:#d9534f;">⚠️ No Internet Connection!</h2>
+                        <button class="paper-btn" style="background-color: #007bff; width: 140px; color: white;" onclick="location.reload()">Try Again</button>
                     </div>
                 `;
             }
@@ -65,74 +167,76 @@
 
 <body>
 
+    <!-- লগইন স্ক্রিন -->
     <div id="login-screen">
-      <img src="https://i.postimg.cc/HsFq06kn/1000013989-Photoroom.png" alt="Logo" style="height: 120px; width: auto;">
+        <img src="https://i.postimg.cc/HsFq06kn/1000013989-Photoroom.png" alt="Logo">
         <h2>MED Bridge Academy</h2>
-        <input type="text" id="userid" placeholder="User ID">
-        <button class="paper-btn" style="background-color: #0A94E8; width: 100px; color: white;" onclick="saveData()">Log in</button>
-    </div>
-<!-- চ্যাট আইকন (Floating Button: ক্লিক করলে চ্যাট সাব-পেইজ ওপেন হবে) -->
-<div onclick="show('chat-portal')" style="position:fixed; bottom:520px; right:10px; background:black; color:#ffffff; padding:6px 10px; border-radius:15px; cursor:pointer; z-index:999; box-shadow:0 4px 6px rgba(0,0,0,0.2);">
-    <font size="2">Messages ➤</font>
-</div>
-
-
-<!-- CHAT PORTAL SUB-PAGE (চ্যাট সাব-পেইজ সেকশন) -->
-<div id="chat-portal" class="sub-page" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #fafafa; z-index: 1500; box-sizing: border-box; padding: 10px; flex-direction: column;">
-    <!-- টপ বার ও ব্যাক বাটন -->
-    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-shrink: 0;">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: black; margin: 0; width: 70px; height: 35px; font-size: 14px;" onclick="show('home')">← Back</button>
-        <h3 id="chatHeaderTitle" style="margin: 0; font-size: 16px; color: #007bff;">ব্যাচ চ্যাট রুম</h3>
-    </div>
-    
-    <!-- চ্যাট মেসেজ দেখানোর এরিয়া (এটি ওপর-নিচে স্ক্রোল হবে) -->
-    <div id="chatMessages" style="flex: 1; padding: 10px; overflow-y: auto; font-size: 13px; background: #fff; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 8px; text-align: left;">
-        লোড হচ্ছে...
+        <input type="text" id="userid" placeholder="Enter Your User ID">
+        <button class="paper-btn" style="background-color: #007bff; width: 100%; max-width: 300px; color: white; margin-top: 10px;" onclick="saveData()">Log In</button>
     </div>
 
-    <!-- ইনপুট ও সেন্ড বাটন (স্ক্রিনের নিচে স্থায়ী/ফিক্সড থাকবে) -->
-    <div style="display: flex; gap: 8px; background: #fff; padding: 8px; border: 1px solid #ddd; border-radius: 8px; flex-shrink: 0;">
-        <input type="text" id="chatInput" placeholder="আপনার মেসেজ লিখুন..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 14px;" onkeypress="handleChatKeyPress(event)">
-        <button onclick="sendChatMessage()" style="padding: 0 16px; background: #007bff; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; height: 40px;">পাঠাও</button>
+    <!-- চ্যাট ফ্লোটিং বাটন -->
+    <div class="chat-float-btn" onclick="show('chat-portal')">
+        <img src="https://i.postimg.cc/L8JCBQzN/icons8-facebook-messenger-48.png" width="40" height="40" alt="Logo" class="rounded-img">
     </div>
-</div>
 
+    <!-- চ্যাট পোর্টাল সাব-পেইজ -->
+    <div id="chat-portal" class="sub-page" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #f4f6f9; z-index: 1500; box-sizing: border-box; padding: 12px; flex-direction: column;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-shrink: 0;">
+            <button class="paper-btn" style="background-color: #e0e0e0; color: #333; margin: 0; width: 70px; height: 38px; font-size: 13px; box-shadow:none;" onclick="show('home')">← Back</button>
+            <h3 id="chatHeaderTitle" style="margin: 0; font-size: 16px; color: #007bff;">Batch Chat Room</h3>
+        </div>
+        
+        <div id="chatMessages" style="flex: 1; padding: 12px; overflow-y: auto; font-size: 13px; background: #fff; border: 1px solid #e1e4e8; border-radius: 10px; margin-bottom: 10px; text-align: left; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
+            Loading...
+        </div>
 
+        <div style="display: flex; gap: 8px; background: #fff; padding: 8px; border: 1px solid #e1e4e8; border-radius: 10px; flex-shrink: 0; box-shadow: 0 -2px 6px rgba(0,0,0,0.03);">
+            <input type="text" id="chatInput" placeholder="Write your message..." style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;" onkeypress="handleChatKeyPress(event)">
+            <button onclick="sendChatMessage()" style="padding: 0 16px; background: #007bff; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; height: 40px; font-size: 14px;">Send</button>
+        </div>
+    </div>
 
-   <div id="home" class="sub-page">
-    <header>
-        <img src="https://i.postimg.cc/HsFq06kn/1000013989-Photoroom.png" alt="Logo" style="height: 60px; width: auto;">
-       <h2><font color="#F0F0F0" face="Arial Black"><b>MED Bridge Academy</b></font></h2>
-    </header>
+    <!-- হোম পেজ -->
+    <div id="home" class="sub-page">
+        <header>
+            <img src="https://i.postimg.cc/HsFq06kn/1000013989-Photoroom.png" alt="Logo">
+            <h2>MED Bridge Academy</h2>
+        </header>
 
-    <h2><font color="#007bff" face="Cambria">HSC Academic Program</font></h2>
+        <div style="margin: 18px 0 10px; text-align: left; padding: 0 15px;">
+            <h3 style="color: #007bff; font-size: 18px; margin: 0;">HSC Academic Program</h3>
+        </div>
+
         <div class="grid">
-            <button onclick="show('physics')"><img src="https://i.postimg.cc/QMGyLs94/Physics-logo.avif" width="110" height="90" alt="Logo" class="rounded-img"><br>Physics</button>
-            <button onclick="show('chemistry')"><img src="https://i.postimg.cc/RZn8HZJ1/Chemistry-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Chemistry</button>
-            <button onclick="show('biology')"><img src="https://i.postimg.cc/JnVsxc81/Biology-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Biology</button>
-            <button onclick="show('math')"><img src="https://i.postimg.cc/wTvjhbNF/Math-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Higher Math</button>
-            <button onclick="show('bangla')"><img src="https://i.postimg.cc/TYzvpkJW/Bangla-logo.png" width="110" height="90" alt="Logo" class="rounded-img"><br>Bangla</button>
-            <button onclick="show('english')"><img src="https://i.postimg.cc/s1FHDLCz/English-logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>English</button>
-            <button onclick="show('ict')"><img src="https://i.postimg.cc/T2bZBjX9/ICT-logo.avif" width="110" height="90" alt="Logo" class="rounded-img"><br>ICT</button>
-            <button onclick="show('med-ad')"><img src="https://i.postimg.cc/W1y82KGG/Medical-Logo.jpg" width="110" height="90" alt="Logo" class="rounded-img"><br>Medical</button>
-        </div><br><hr>
-        <div>
-            <p>MED Bridge Academy <br> Contact: +8801612296263</p>
+            <button onclick="show('physics')"><img src="https://i.postimg.cc/QMGyLs94/Physics-logo.avif" width="60" height="60" alt="Logo" class="rounded-img">Physics</button>
+            <button onclick="show('chemistry')"><img src="https://i.postimg.cc/RZn8HZJ1/Chemistry-logo.jpg" width="60" height="60" alt="Logo" class="rounded-img">Chemistry</button>
+            <button onclick="show('biology')"><img src="https://i.postimg.cc/JnVsxc81/Biology-logo.jpg" width="60" height="60" alt="Logo" class="rounded-img">Biology</button>
+            <button onclick="show('math')"><img src="https://i.postimg.cc/wTvjhbNF/Math-logo.jpg" width="60" height="60" alt="Logo" class="rounded-img">Higher Math</button>
+            <button onclick="show('bangla')"><img src="https://i.postimg.cc/TYzvpkJW/Bangla-logo.png" width="60" height="60" alt="Logo" class="rounded-img">Bangla</button>
+            <button onclick="show('english')"><img src="https://i.postimg.cc/s1FHDLCz/English-logo.jpg" width="60" height="60" alt="Logo" class="rounded-img">English</button>
+            <button onclick="show('ict')"><img src="https://i.postimg.cc/T2bZBjX9/ICT-logo.avif" width="60" height="60" alt="Logo" class="rounded-img">ICT</button>
+            <button onclick="show('med-ad')"><img src="https://i.postimg.cc/W1y82KGG/Medical-Logo.jpg" width="60" height="60" alt="Logo" class="rounded-img">Medical</button>
+        </div>
+        
+        <div style="margin-top: 25px; padding: 15px; color: #777; font-size: 13px;">
+            <hr style="border:0; border-top:1px solid #ddd; margin-bottom: 12px;">
+            <p style="margin:0; font-weight: 500;">MED Bridge Academy <br> Contact: +8801612296263</p>
         </div>
     </div>
 
     <!-- Physics মেইন সেকশন -->
     <div id="physics" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button>
-        <h3>Physics</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">Physics</h3>
         <button class="paper-btn" onclick="show('physics-1st')">1st Paper</button>
         <button class="paper-btn" onclick="show('physics-2nd')">2nd Paper</button>
     </div>
 
     <!-- Physics 1st Paper -->
     <div id="physics-1st" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics')">← Back</button>
-        <h3>Physics 1st Paper</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">Physics 1st Paper</h3>
         <button class="paper-btn" onclick="show('phy1-1')">Chapter 1</button>
         <button class="paper-btn" onclick="show('phy1-2')">Chapter 2</button>
         <button class="paper-btn" onclick="show('phy1-3')">Chapter 3</button>
@@ -146,8 +250,8 @@
     </div>
 
     <div id="physics-2nd" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics')">← Back</button>
-        <h3>Physics 2nd Paper</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">Physics 2nd Paper</h3>
         <button class="paper-btn" onclick="show('phy2-1')">Chapter 1</button>
         <button class="paper-btn" onclick="show('phy2-2')">Chapter 2</button>
         <button class="paper-btn" onclick="show('phy2-3')">Chapter 3</button>
@@ -161,111 +265,111 @@
     </div>
 
     <!-- Chapter Links (Physics 1st & 2nd) -->
-    <div id="phy1-1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1LaomKIqgZ3l6p9jY1YWjcvh1_wghUOTd" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1tFvwwszh7uZCi5_HTEXy2boeFu73IEan" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1dX1qFiQj7Xy4fweF1mWKikl2Z3y3KSI1" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1v9gHcG8xU-L6MzRqr4PLqdAaydEeWojw" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/11d729JwToIFRr0v6pzqzEwdeljvnwro_" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1NyPprZeGuER__90WZM9F7Iz8h-gp1fLw" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1dAFivPIKlvWLNawh-NQxB32CTZ2S_wPA" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1mshlekNvxiRI7yCSKfO8wEpLVROf5tfP" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/15qAcnfzn70a30jbA4FGLa3U-Xol2i96h" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy1-10" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-1st')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1DEQD97qfRcyxsQr6cdy6cpk1QLp85DUR" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1LaomKIqgZ3l6p9jY1YWjcvh1_wghUOTd" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1tFvwwszh7uZCi5_HTEXy2boeFu73IEan" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1dX1qFiQj7Xy4fweF1mWKikl2Z3y3KSI1" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1v9gHcG8xU-L6MzRqr4PLqdAaydEeWojw" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/11d729JwToIFRr0v6pzqzEwdeljvnwro_" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1NyPprZeGuER__90WZM9F7Iz8h-gp1fLw" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1dAFivPIKlvWLNawh-NQxB32CTZ2S_wPA" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1mshlekNvxiRI7yCSKfO8wEpLVROf5tfP" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/15qAcnfzn70a30jbA4FGLa3U-Xol2i96h" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy1-10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-1st')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1DEQD97qfRcyxsQr6cdy6cpk1QLp85DUR" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
-    <div id="phy2-1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1Q7Oesya7LOEPAumcLdSyP6NHPHu9zG5u" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/160kAkMmDpgOQefx8DI0rPiFREIVsaAEg" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/11V1PUeKInUPPxSVgUw5Le0F8rrnRhTXY" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1VqH01FFRahq2zVz6zo8t8ocDZI2QXzBm" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1ylIefn7audeN5Vr0_zFknoPEAtKMXebV" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1WPNCfr6Siv53IcEmMm_12sWLfvIun3ig" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1j-eYdwESaZD1_5kISMQbBSWoNaHX5mDZ" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1LKJc_msIw-1GW5p5cCs_uZJn-zyFmHFP" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/1EHNkETNhIIy-DKHcCC3jzCEXfmpjYNlz" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="phy2-10" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1dWmr23Dq-eIsYZRcRtfC2zae16VEn-kC" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1Q7Oesya7LOEPAumcLdSyP6NHPHu9zG5u" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/160kAkMmDpgOQefx8DI0rPiFREIVsaAEg" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/11V1PUeKInUPPxSVgUw5Le0F8rrnRhTXY" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1VqH01FFRahq2zVz6zo8t8ocDZI2QXzBm" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1ylIefn7audeN5Vr0_zFknoPEAtKMXebV" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1WPNCfr6Siv53IcEmMm_12sWLfvIun3ig" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1j-eYdwESaZD1_5kISMQbBSWoNaHX5mDZ" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1LKJc_msIw-1GW5p5cCs_uZJn-zyFmHFP" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/1EHNkETNhIIy-DKHcCC3jzCEXfmpjYNlz" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="phy2-10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('physics-2nd')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1dWmr23Dq-eIsYZRcRtfC2zae16VEn-kC" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
     <!-- Chemistry Main & Chapters -->
-    <div id="chemistry" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button><h3>Chemistry</h3><button class="paper-btn" onclick="show('chemistry-1st')">1st Paper</button><button class="paper-btn" onclick="show('chemistry-2nd')">2nd Paper</button></div>
-    <div id="chemistry-1st" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry')">← Back</button><h3>Chemistry 1st Paper</h3><button class="paper-btn" onclick="show('chem1-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('chem1-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('chem1-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('chem1-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('chem1-ch5')">Chapter 5</button></div>
-    <div id="chemistry-2nd" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry')">← Back</button><h3>Chemistry 2nd Paper</h3><button class="paper-btn" onclick="show('chem2-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('chem2-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('chem2-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('chem2-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('chem2-ch5')">Chapter 5</button></div>
+    <div id="chemistry" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Chemistry</h3><button class="paper-btn" onclick="show('chemistry-1st')">1st Paper</button><button class="paper-btn" onclick="show('chemistry-2nd')">2nd Paper</button></div>
+    <div id="chemistry-1st" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Chemistry 1st Paper</h3><button class="paper-btn" onclick="show('chem1-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('chem1-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('chem1-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('chem1-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('chem1-ch5')">Chapter 5</button></div>
+    <div id="chemistry-2nd" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Chemistry 2nd Paper</h3><button class="paper-btn" onclick="show('chem2-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('chem2-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('chem2-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('chem2-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('chem2-ch5')">Chapter 5</button></div>
 
-    <div id="chem1-ch1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1S0SH1AbsUhi1U85FRhEPkduT8h6JUi-2" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem1-ch2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1RJMmpsusyk-4CPo5TUStST6D4-tE1JvL" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem1-ch3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1lKJNzSR8XZyS-RA8eoc9FHYoy2ULiE4J" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem1-ch4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1a2WM5enUz6QMm8G5K5yX-4dANfCq_pTA" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem1-ch5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1vqb7yeFTE7S9bCW4cVUnbPiEvFY0ch7G" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem1-ch1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1S0SH1AbsUhi1U85FRhEPkduT8h6JUi-2" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem1-ch2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1RJMmpsusyk-4CPo5TUStST6D4-tE1JvL" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem1-ch3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1lKJNzSR8XZyS-RA8eoc9FHYoy2ULiE4J" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem1-ch4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1a2WM5enUz6QMm8G5K5yX-4dANfCq_pTA" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem1-ch5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1vqb7yeFTE7S9bCW4cVUnbPiEvFY0ch7G" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
-    <div id="chem2-ch1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1ix6FYDXL5y6mLaiYVJiF9_9368CfVRtk" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem2-ch2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1QTu29sKBA2EcI7b2s-zymk2IeVYdnP9I" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem2-ch3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1YmdOYFh78VjyZB3rUA906gSb3_0rHSKi" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem2-ch4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1KSzgsxQUIkAN6ci7l4xXFpiFtBuLiAaC" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="chem2-ch5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1nowPy3lWwrqGP8OP18ftnBCzRFD3UVur" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem2-ch1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1ix6FYDXL5y6mLaiYVJiF9_9368CfVRtk" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem2-ch2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1QTu29sKBA2EcI7b2s-zymk2IeVYdnP9I" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem2-ch3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1YmdOYFh78VjyZB3rUA906gSb3_0rHSKi" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem2-ch4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1KSzgsxQUIkAN6ci7l4xXFpiFtBuLiAaC" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="chem2-ch5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('chemistry-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1nowPy3lWwrqGP8OP18ftnBCzRFD3UVur" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
     <!-- BIOLOGY PART -->
-    <div id="biology" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button><h3>Biology</h3><button class="paper-btn" onclick="show('biology-1st')">1st Paper</button><button class="paper-btn" onclick="show('biology-2nd')">2nd Paper</button></div>
-    <div id="biology-1st" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology')">← Back</button><h3>Biology 1st Paper</h3><button class="paper-btn" onclick="show('bio1-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('bio1-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('bio1-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('bio1-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('bio1-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('bio1-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('bio1-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('bio1-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('bio1-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('bio1-ch10')">Chapter 10</button><button class="paper-btn" onclick="show('bio1-ch11')">Chapter 11</button><button class="paper-btn" onclick="show('bio1-ch12')">Chapter 12</button></div>
-    <div id="biology-2nd" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology')">← Back</button><h3>Biology 2nd Paper</h3><button class="paper-btn" onclick="show('bio2-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('bio2-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('bio2-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('bio2-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('bio2-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('bio2-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('bio2-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('bio2-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('bio2-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('bio2-ch10')">Chapter 10</button><button class="paper-btn" onclick="show('bio2-ch11')">Chapter 11</button><button class="paper-btn" onclick="show('bio2-ch12')">Chapter 12</button></div>
+    <div id="biology" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Biology</h3><button class="paper-btn" onclick="show('biology-1st')">1st Paper</button><button class="paper-btn" onclick="show('biology-2nd')">2nd Paper</button></div>
+    <div id="biology-1st" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Biology 1st Paper</h3><button class="paper-btn" onclick="show('bio1-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('bio1-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('bio1-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('bio1-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('bio1-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('bio1-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('bio1-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('bio1-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('bio1-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('bio1-ch10')">Chapter 10</button><button class="paper-btn" onclick="show('bio1-ch11')">Chapter 11</button><button class="paper-btn" onclick="show('bio1-ch12')">Chapter 12</button></div>
+    <div id="biology-2nd" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Biology 2nd Paper</h3><button class="paper-btn" onclick="show('bio2-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('bio2-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('bio2-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('bio2-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('bio2-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('bio2-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('bio2-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('bio2-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('bio2-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('bio2-ch10')">Chapter 10</button><button class="paper-btn" onclick="show('bio2-ch11')">Chapter 11</button><button class="paper-btn" onclick="show('bio2-ch12')">Chapter 12</button></div>
 
     <!-- Bio Chapters -->
-    <div id="bio1-ch1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1U6OuVJUQ4oQDWMdKK7oXa49aytJbiu3z" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1g06OKonXcdRB4lF__FDyJLmX3CVitWIc" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1O4YH_GE0kZcw6yccoxMR7jDxgwAMdoCY" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1ROyPHKccNNWdoyAocfTd14RNMXmSR4KE" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1LdsjsBGUmlWuelLGMfPpZY4ijbhvV4Vt" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1Z1GXyNmabo8oGfSp0sUjpeWRHmN7HjMc" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1OQFfeyd-PoOBe87-hCjPKewtJo3HIRDS" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1TU46LpI27DuvEI7T47WW1Ma8K_OxKiYV" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/14l9pKlTn-DBVCeAtirUrFcfWT1vD6q9k" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch10" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1jYOhCFLIwbX0-nAuA0DbwuvLFesWykgs" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch11" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 11</h3><a href="https://drive.google.com/drive/folders/1dzBsg8khbOBPF8yUMwcE1bMTTMuQfKPd" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio1-ch12" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-1st')">← Back</button><h3>Chapter 12</h3><a href="https://drive.google.com/drive/folders/1aMatqoTOhDm_WWpaKPYCPh0qIUj-xwAV" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1U6OuVJUQ4oQDWMdKK7oXa49aytJbiu3z" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1g06OKonXcdRB4lF__FDyJLmX3CVitWIc" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1O4YH_GE0kZcw6yccoxMR7jDxgwAMdoCY" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1ROyPHKccNNWdoyAocfTd14RNMXmSR4KE" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1LdsjsBGUmlWuelLGMfPpZY4ijbhvV4Vt" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1Z1GXyNmabo8oGfSp0sUjpeWRHmN7HjMc" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1OQFfeyd-PoOBe87-hCjPKewtJo3HIRDS" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1TU46LpI27DuvEI7T47WW1Ma8K_OxKiYV" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/14l9pKlTn-DBVCeAtirUrFcfWT1vD6q9k" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1jYOhCFLIwbX0-nAuA0DbwuvLFesWykgs" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch11" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 11</h3><a href="https://drive.google.com/drive/folders/1dzBsg8khbOBPF8yUMwcE1bMTTMuQfKPd" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio1-ch12" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-1st')">← Back</button><h3>Chapter 12</h3><a href="https://drive.google.com/drive/folders/1aMatqoTOhDm_WWpaKPYCPh0qIUj-xwAV" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
-    <div id="bio2-ch1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1pl0rcxL81FTzaAr29xN1oT5d2ei3lHpB" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1cBSpy5yl6-zMj-7uUcNka_t8PnuZDT03" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Note PDF Download</a></div>
-    <div id="bio2-ch3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1YuMJcNOGhEmzMPVlXG9QTeoNkhob8rAL" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1W7dBX96Auqe1rHx0swpi14Xc1eHigJNo" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1KisdSNIRL9Qjf4FS01Dc_OR4zzBNMCSW" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/15OYCezzbx957UtAeK1f2SSGcmfYWHBiO" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/19CzMPRgHa6CWiNwIT_9d772UpiaVVey8" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1TkhZkQqu-Y5X4XaM1StYYpq-kAlKLB4I" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/12zWulD2TsqOu2IwnXdDqBjowPWsOPtOd" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch10" class="sub-page"><button onclick="show('biology-2nd')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/115xqgo9EBD1i_Gx_RPe2pa4gkdVCywoW" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch11" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 11</h3><a href="https://drive.google.com/drive/folders/1K7bGrD9LIkk_WPP6EMSngVL8_TbP6zvI" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="bio2-ch12" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 12</h3><a href="https://drive.google.com/drive/folders/1LMG56NRKoSkb7WBmoo1_0ooP1c62m8vj" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1pl0rcxL81FTzaAr29xN1oT5d2ei3lHpB" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1cBSpy5yl6-zMj-7uUcNka_t8PnuZDT03" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Note PDF Download</a></div>
+    <div id="bio2-ch3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1YuMJcNOGhEmzMPVlXG9QTeoNkhob8rAL" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1W7dBX96Auqe1rHx0swpi14Xc1eHigJNo" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1KisdSNIRL9Qjf4FS01Dc_OR4zzBNMCSW" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/15OYCezzbx957UtAeK1f2SSGcmfYWHBiO" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/19CzMPRgHa6CWiNwIT_9d772UpiaVVey8" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1TkhZkQqu-Y5X4XaM1StYYpq-kAlKLB4I" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/12zWulD2TsqOu2IwnXdDqBjowPWsOPtOd" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/115xqgo9EBD1i_Gx_RPe2pa4gkdVCywoW" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch11" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 11</h3><a href="https://drive.google.com/drive/folders/1K7bGrD9LIkk_WPP6EMSngVL8_TbP6zvI" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="bio2-ch12" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('biology-2nd')">← Back</button><h3>Chapter 12</h3><a href="https://drive.google.com/drive/folders/1LMG56NRKoSkb7WBmoo1_0ooP1c62m8vj" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
     <!-- MATH PART -->
-    <div id="math" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button><h3>Higher Math</h3><button class="paper-btn" onclick="show('math-1st')">1st Paper</button><button class="paper-btn" onclick="show('math-2nd')">2nd Paper</button></div>
-    <div id="math-1st" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math')">← Back</button><h3>Math 1st Paper</h3><button class="paper-btn" onclick="show('ma1-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('ma1-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('ma1-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('ma1-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('ma1-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('ma1-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('ma1-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('ma1-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('ma1-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('ma1-ch10')">Chapter 10</button></div>
-    <div id="math-2nd" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math')">← Back</button><h3>Math 2nd Paper</h3><button class="paper-btn" onclick="show('ma2-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('ma2-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('ma2-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('ma2-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('ma2-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('ma2-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('ma2-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('ma2-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('ma2-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('ma2-ch10')">Chapter 10</button></div>
+    <div id="math" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Higher Math</h3><button class="paper-btn" onclick="show('math-1st')">1st Paper</button><button class="paper-btn" onclick="show('math-2nd')">2nd Paper</button></div>
+    <div id="math-1st" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Math 1st Paper</h3><button class="paper-btn" onclick="show('ma1-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('ma1-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('ma1-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('ma1-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('ma1-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('ma1-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('ma1-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('ma1-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('ma1-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('ma1-ch10')">Chapter 10</button></div>
+    <div id="math-2nd" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Math 2nd Paper</h3><button class="paper-btn" onclick="show('ma2-ch1')">Chapter 1</button><button class="paper-btn" onclick="show('ma2-ch2')">Chapter 2</button><button class="paper-btn" onclick="show('ma2-ch3')">Chapter 3</button><button class="paper-btn" onclick="show('ma2-ch4')">Chapter 4</button><button class="paper-btn" onclick="show('ma2-ch5')">Chapter 5</button><button class="paper-btn" onclick="show('ma2-ch6')">Chapter 6</button><button class="paper-btn" onclick="show('ma2-ch7')">Chapter 7</button><button class="paper-btn" onclick="show('ma2-ch8')">Chapter 8</button><button class="paper-btn" onclick="show('ma2-ch9')">Chapter 9</button><button class="paper-btn" onclick="show('ma2-ch10')">Chapter 10</button></div>
 
     <!-- Math Chapters -->
-    <div id="ma1-ch1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1tUrYqEjxT4bh87m1ToWDSnU4PPgDnZAO" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1zpOT9lSfA6s760Sr-qqSfjtb_nm2QeMH" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1RcJ7xKSXvnsO_vsB0_UY7wL0jpEwYgHA" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1W-jqQvsFESIrnxZit8Yr6Bq_8-D_Rw54" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1RsvQGzIkytIcL0Mu7zXNFYCbSc73CTFy" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1XdIK0KheCJJ3PYUcJE6wfnqJhSNQdozQ" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1h9_kUps7w5g2YBgRtZ6XgLcItW67wGeI" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1CQigHaCUHh5ZqSr2d9DXyqGMfdJkSbAM" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/1djCTuVWOJaX9JmxOdcH-ftHmaOlOsPC1" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma1-ch10" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-1st')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1l6-ig57XLaOY0DZCSYpWqOE0UUxnKanw" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/1tUrYqEjxT4bh87m1ToWDSnU4PPgDnZAO" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1zpOT9lSfA6s760Sr-qqSfjtb_nm2QeMH" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1RcJ7xKSXvnsO_vsB0_UY7wL0jpEwYgHA" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1W-jqQvsFESIrnxZit8Yr6Bq_8-D_Rw54" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1RsvQGzIkytIcL0Mu7zXNFYCbSc73CTFy" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1XdIK0KheCJJ3PYUcJE6wfnqJhSNQdozQ" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1h9_kUps7w5g2YBgRtZ6XgLcItW67wGeI" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1CQigHaCUHh5ZqSr2d9DXyqGMfdJkSbAM" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/1djCTuVWOJaX9JmxOdcH-ftHmaOlOsPC1" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma1-ch10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-1st')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1l6-ig57XLaOY0DZCSYpWqOE0UUxnKanw" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
-    <div id="ma2-ch1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/14LHhFetWmaKE31o5uT_JNnkaqFgjAvr5" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1fZH0YWqlXuXvmh0L6yVEoaiJHxKivlsL" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1Nru5hRE6NS0-jfZRPUhQEA4fYu3Mckvn" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/12hoywmBrTyRzT47NXUAicDWYgL6MASWH" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1iDM3rwn1TUXwe6CVFHPayvclzSXv5akZ" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1fb7wYM1K5crwd4L1HxqwTzEEb9LgIcCW" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1x-onPBxNpfU8avBTCiuLo4Ig2e-IQc5l" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Note PDF Download</a></div>
-    <div id="ma2-ch8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1iAFOgVYRxPjXjd7BDnBp1UzeGh2MxkUz" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/13I1QgSFaZJ76dFxCE_z6vmSVaLsCZYK3" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ma2-ch10" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('math-2nd')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1E9Gc2qUOh7YiAyIdLeQsfbs86nec1IPI" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/14LHhFetWmaKE31o5uT_JNnkaqFgjAvr5" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1fZH0YWqlXuXvmh0L6yVEoaiJHxKivlsL" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1Nru5hRE6NS0-jfZRPUhQEA4fYu3Mckvn" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/12hoywmBrTyRzT47NXUAicDWYgL6MASWH" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/1iDM3rwn1TUXwe6CVFHPayvclzSXv5akZ" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1fb7wYM1K5crwd4L1HxqwTzEEb9LgIcCW" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 7</h3><a href="https://drive.google.com/drive/folders/1x-onPBxNpfU8avBTCiuLo4Ig2e-IQc5l" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Note PDF Download</a></div>
+    <div id="ma2-ch8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 8</h3><a href="https://drive.google.com/drive/folders/1iAFOgVYRxPjXjd7BDnBp1UzeGh2MxkUz" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 9</h3><a href="https://drive.google.com/drive/folders/13I1QgSFaZJ76dFxCE_z6vmSVaLsCZYK3" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ma2-ch10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('math-2nd')">← Back</button><h3>Chapter 10</h3><a href="https://drive.google.com/drive/folders/1E9Gc2qUOh7YiAyIdLeQsfbs86nec1IPI" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
     <!-- Bangla & English & ICT & Medical -->
-    <div id="bangla" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button><h3>Bangla</h3><button class="paper-btn">1st Paper</button><button class="paper-btn">2nd Paper</button></div>
-    <div id="english" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button><h3>English</h3><a href="https://drive.google.com/drive/folders/1P3bIDqEuoXUN7sXqKzibnUTd6zGxkMyi?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">1st Paper</a><button class="paper-btn" onclick="show('eng-2nd')">2nd Paper</button></div>
+    <div id="bangla" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">Bangla</h3><button class="paper-btn">1st Paper</button><button class="paper-btn">2nd Paper</button></div>
+    <div id="english" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button><h3 style="color: #044E8A; margin: 15px 0;">English</h3><a href="https://drive.google.com/drive/folders/1P3bIDqEuoXUN7sXqKzibnUTd6zGxkMyi?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">1st Paper</a><button class="paper-btn" onclick="show('eng-2nd')">2nd Paper</button></div>
     <div id="eng-2nd" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('english')">← Back</button>
-        <h3>English 2nd paper</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('english')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">English 2nd paper</h3>
         <button class="paper-btn" onclick="show('eng1-t1')">Article</button>
         <button class="paper-btn" onclick="show('eng1-t2')">Preposition</button>
         <button class="paper-btn" onclick="show('eng1-t3')">Special phrase/words</button>
@@ -282,24 +386,24 @@
     </div>
 
     <!-- English Topics -->
-    <div id="eng1-t1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Article</h3><a href="https://drive.google.com/drive/folders/1hYcCHjsSa6Gx3S9BUMzmQ4D3_lBtYHJh?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Preposition</h3><a href="https://drive.google.com/drive/folders/1NwuLJDsETiRituTMe1In_po5KbPlOLPh?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Special phrase/words</h3><a href="https://drive.google.com/drive/folders/1Xt-Q_ge30JoHzByIqXNM0dawyuaqOqLH?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Completing sentence</h3><a href="https://drive.google.com/drive/folders/1dZyNqwnzBZaB9vkrEmc01_QeD9RWqVLW?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Right form of verb</h3><a href="https://drive.google.com/drive/folders/1oQF4h6O9AJCvXaJjXHXeNk4hwK0MXjwn?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Narration</h3><a href="https://drive.google.com/drive/folders/19Smj4jcW3UrmxlVwdYx0wQ664965EraS?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t7" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Changing sentence</h3><a href="https://drive.google.com/drive/folders/1eRwGWVZg6gl_2o7UoVlpTF_R3xsmuP6M?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t8" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Pronoun reference</h3><a href="https://drive.google.com/drive/folders/1veCXvcXmJHnQ2jMrfc3huMxpfNJ-FXMx?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t9" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Modifier</h3><a href="https://drive.google.com/drive/folders/1F53bUoSgh0siDBJG9Ik4wzX4skRbC45M?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t10" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Connector</h3><a href="https://drive.google.com/drive/folders/1PECmbdaCqYfbU73pm6YO3-doC2PYrFBx?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t11" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Synonym or Antonym</h3><a href="https://drive.google.com/drive/folders/1a4KFWAQvoadcDYCUsKeOO7qn-1poGEym?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t12" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Punctuation marks</h3><a href="https://drive.google.com/drive/folders/1E1mf0N9ROsPCpRtC2nTu6Kp-6DCdvA__?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="eng1-t13" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('eng-2nd')">← Back</button><h3>Writing Part</h3><a href="https://drive.google.com/drive/folders/1irVLx7AQGVGjL0Di-dKwocjClmzCA15b?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Article</h3><a href="https://drive.google.com/drive/folders/1hYcCHjsSa6Gx3S9BUMzmQ4D3_lBtYHJh?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Preposition</h3><a href="https://drive.google.com/drive/folders/1NwuLJDsETiRituTMe1In_po5KbPlOLPh?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Special phrase/words</h3><a href="https://drive.google.com/drive/folders/1Xt-Q_ge30JoHzByIqXNM0dawyuaqOqLH?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Completing sentence</h3><a href="https://drive.google.com/drive/folders/1dZyNqwnzBZaB9vkrEmc01_QeD9RWqVLW?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Right form of verb</h3><a href="https://drive.google.com/drive/folders/1oQF4h6O9AJCvXaJjXHXeNk4hwK0MXjwn?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Narration</h3><a href="https://drive.google.com/drive/folders/19Smj4jcW3UrmxlVwdYx0wQ664965EraS?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t7" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Changing sentence</h3><a href="https://drive.google.com/drive/folders/1eRwGWVZg6gl_2o7UoVlpTF_R3xsmuP6M?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t8" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Pronoun reference</h3><a href="https://drive.google.com/drive/folders/1veCXvcXmJHnQ2jMrfc3huMxpfNJ-FXMx?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t9" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Modifier</h3><a href="https://drive.google.com/drive/folders/1F53bUoSgh0siDBJG9Ik4wzX4skRbC45M?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t10" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Connector</h3><a href="https://drive.google.com/drive/folders/1PECmbdaCqYfbU73pm6YO3-doC2PYrFBx?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t11" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Synonym or Antonym</h3><a href="https://drive.google.com/drive/folders/1a4KFWAQvoadcDYCUsKeOO7qn-1poGEym?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t12" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Punctuation marks</h3><a href="https://drive.google.com/drive/folders/1E1mf0N9ROsPCpRtC2nTu6Kp-6DCdvA__?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="eng1-t13" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('eng-2nd')">← Back</button><h3>Writing Part</h3><a href="https://drive.google.com/drive/folders/1irVLx7AQGVGjL0Di-dKwocjClmzCA15b?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
     <!-- ICT -->
     <div id="ict" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button>
-        <h3>ICT</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">ICT</h3>
         <button class="paper-btn" onclick="show('ict-1')">Chapter 1</button>
         <button class="paper-btn" onclick="show('ict-2')">Chapter 2</button>
         <button class="paper-btn" onclick="show('ict-3')">Chapter 3</button>
@@ -307,17 +411,17 @@
         <button class="paper-btn" onclick="show('ict-5')">Chapter 5</button>
         <button class="paper-btn" onclick="show('ict-6')">Chapter 6</button>
     </div>
-    <div id="ict-1" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('ict')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/14onFXVfzLtD7h1qLpVrxH7xJRMbj6vH7?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ict-2" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('ict')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1YpaefPYP0w0TGTiPres27-0Z4T71Cdh1?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ict-3" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('ict')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1x8nrdR2W2Zdmo8BYg2ga4I0Wrz2kytKG?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ict-4" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('ict')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1_2-tV05Om4ESgiU0z3akXNOOyHlW1AsT?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ict-5" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('ict')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/19LLMuFaUBUV6I8rAP_JttDErrrRUg6VE?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
-    <div id="ict-6" class="sub-page"><button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('ict')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1dPwYmmgU11wmLC8mP6vDLGx91eHF3Ei_?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ict-1" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('ict')">← Back</button><h3>Chapter 1</h3><a href="https://drive.google.com/drive/folders/14onFXVfzLtD7h1qLpVrxH7xJRMbj6vH7?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ict-2" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('ict')">← Back</button><h3>Chapter 2</h3><a href="https://drive.google.com/drive/folders/1YpaefPYP0w0TGTiPres27-0Z4T71Cdh1?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ict-3" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('ict')">← Back</button><h3>Chapter 3</h3><a href="https://drive.google.com/drive/folders/1x8nrdR2W2Zdmo8BYg2ga4I0Wrz2kytKG?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ict-4" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('ict')">← Back</button><h3>Chapter 4</h3><a href="https://drive.google.com/drive/folders/1_2-tV05Om4ESgiU0z3akXNOOyHlW1AsT?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ict-5" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('ict')">← Back</button><h3>Chapter 5</h3><a href="https://drive.google.com/drive/folders/19LLMuFaUBUV6I8rAP_JttDErrrRUg6VE?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
+    <div id="ict-6" class="sub-page"><button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('ict')">← Back</button><h3>Chapter 6</h3><a href="https://drive.google.com/drive/folders/1dPwYmmgU11wmLC8mP6vDLGx91eHF3Ei_?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a></div>
 
     <!-- মেডিকেল সেকশন -->
     <div id="med-ad" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('home')">← Back</button>
-        <h3>Medical Admission</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('home')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">Medical Admission</h3>
         <button class="paper-btn" onclick="show('med-phy')">Physics</button>
         <button class="paper-btn" onclick="show('med-chem')">Chemistry</button>
         <button class="paper-btn" onclick="show('med-bio')">Biology</button>
@@ -325,62 +429,75 @@
         <button class="paper-btn" onclick="show('med-gk')">General Knowledge</button>
     </div>
     <div id="med-gk" class="sub-page">
-        <button class="paper-btn" style="background-color: #E3E3E3; color: white;" onclick="show('med-ad')">← Back</button>
-        <h3>General Knowledge</h3>
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; width: 90px;" onclick="show('med-ad')">← Back</button>
+        <h3 style="color: #044E8A; margin: 15px 0;">General Knowledge</h3>
         <a href="https://drive.google.com/drive/folders/1ury2jCxAztJwVpku-a6e3CNMd-M-tgSi?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Content & Class</a>
     </div>
 
     <!-- Profile -->
-    <div id="profile" class="sub-page" style="display:none;">
-        <table border="1" cellspacing="0" cellpadding="10px" align="center" style="width:100%;">
-          <tr align="center"><th>Student Profile</th></tr>
-          <tr align="center">
-              <td>
-              <p align="left">Name: <span id="displayname"></span></p>
-              <p align="left">User ID: <span id="displayid"></span></p>
-              <p align="left">Batch: <span id="displaybatch"></span></p>
-              <p align="left">College: <span id="displaycollege"></span></p>
-              </td>
-          </tr>
-        </table> 
-        <button onclick="logout()" class="paper-btn" style="background-color: #D41564;width: 120px; color: white;">↩️ Log out</button><br>
-        <h3>My Result:</h3>
-        <span id="displayresult"></span><br><br>
-        <h4>Join us on Facebook & YouTube</h4><hr>
-        <a href="https://www.facebook.com/profile.php?id=61572171609595" target="_blank" style="text-decoration: none; display: block; text-align: center;">Facebook: MED Bridge Academy</a><br>
-        <a href="https://youtube.com/@medbridgeacademy-p2v?si=hQh7Snc_miiRPH_B" target="_blank" style="text-decoration: none; display: block; text-align: center;">YouTube: MED Bridge Academy</a>
+    <div id="profile" class="sub-page" style="display:none; max-width: 450px; margin: 0 auto;">
+        <div class="profile-card">
+            <h3 style="color:#007bff; margin-top:0; font-size:16px; border-bottom:1px solid #eee; padding-bottom:8px;">Student Profile</h3>
+            <p>Name: <span id="displayname"></span></p>
+            <p>User ID: <span id="displayid"></span></p>
+            <p>Batch: <span id="displaybatch"></span></p>
+            <p>College: <span id="displaycollege"></span></p>
+        </div> 
+<button onclick="logout()" class="paper-btn" style="background-color: #d9534f; padding: 7px; width: 110px; color: white; margin: 5px auto;">↩️ Log Out</button>
+        <div class="profile-card" style="text-align: left;">
+            <h4 style="color:#044E8A; margin-top:0; font-size:15px;">My Result:</h4>
+            <span id="displayresult" style="font-size: 14px; color: #555;"></span>
+        </div>
+<br><br>
+        <div class="profile-card" style="text-align: left;">
+            <h4 style="color:#044E8A; margin-top:0; font-size:15px;">Join us on Facebook & YouTube</h4>
+            <hr style="border:0; border-top:1px solid #eee; margin:8px 0;">
+            <a href="https://www.facebook.com/profile.php?id=61572171609595" target="_blank" style="text-decoration: none; display: block; color: #007bff; font-size: 14px; margin-bottom: 6px;">📘 Facebook: MED Bridge Academy</a>
+            <a href="https://youtube.com/@medbridgeacademy-p2v?si=hQh7Snc_miiRPH_B" target="_blank" style="text-decoration: none; display: block; color: #ff0000; font-size: 14px;">▶️ YouTube: MED Bridge Academy</a>
+        </div>
+
+        
     </div>   
 
     <!-- Notice -->
-   <div id="notice" class="sub-page" style="display:none;">
-        
-        <div id="noticeBox" style="background: #fff3cd; color: #856404; padding: 12px 18px; border-radius: 8px; margin: 15px 0; border-left: 5px solid #ffc107; display: none; font-weight: 500; text-align: left;">
+    <div id="notice" class="sub-page" style="display:none; max-width: 450px; margin: 0 auto;"><h2>Notice</h2>
+        <div id="noticeBox" style="background: #fff8e1; color: #8f6b00; padding: 10px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #ffc107; display: none; font-weight: 400; text-align: center; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
             📢 <span id="noticeContent">Loading...</span>
         </div>
-
-        <a href="https://drive.google.com/drive/folders/1d3rTbiEIR72yUA5VNGEit0FpSoSRzswf?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Class Routine</a>
-        <a href="https://drive.google.com/drive/folders/1_JhH3qwTo7rbPQhEebUY-bAZ8-p9ZGKg?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">Result</a>
-        <br><br>
-        <div><p><hr> <h2>MED Bridge Academy</h2><br> Contact: +8801612296263</p></div>
+        <br><br><br>
+        <a href="https://drive.google.com/drive/folders/1d3rTbiEIR72yUA5VNGEit0FpSoSRzswf?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">📅 Class Routine</a>
+        <a href="https://drive.google.com/drive/folders/1_JhH3qwTo7rbPQhEebUY-bAZ8-p9ZGKg?usp=drive_link" target="_blank" class="paper-btn" style="text-decoration: none; display: block; text-align: center;">📊 Result</a>
+        
+        <div style="margin-top: 40px; color: #777; font-size: 13px;">
+            <hr style="border:0; border-top:1px solid #ddd; margin-bottom: 12px;">
+            <h3 style="color: #044E8A; margin: 0 0 5px; font-size: 16px;">MED Bridge Academy</h3>
+            <p style="margin:0;">Contact: +8801612296263</p>
+        </div>
     </div>
 
-    <!-- Q&A PORTAL -->
-    <div id="qa-portal" class="sub-page" style="display:none;">
-        <div class="qa-container">
-            <div class="qa-header">
-                <h2>MED Bridge Q&A Portal</h2>
-            </div>
-            <div class="qa-tabs">
-                <button class="qa-tab active" onclick="showQATab('ask', this)">Question</button>
-                <button class="qa-tab" onclick="showQATab('check', this)">Answere</button>
-            </div>
+<!-- Q&A PORTAL -->
+<div id="qa-portal" class="sub-page" style="display:none; padding: 12px; max-width: 500px; margin: 0 auto; text-align: left;">
+    <div style="background: #ffffff; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow: hidden; border: 1px solid #eaeaea;">
+        
+        <!-- হেডার অংশ -->
+        <div style="background: linear-gradient(135deg, #044E8A, #007bff); color: white; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;">
+            <h2 style="margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.3px;">MED Bridge Q&A Portal</h2>
+            <span style="font-size: 20px;">❓</span>
+        </div>
 
-            <!-- প্রশ্ন করার অংশ -->
+        <!-- ট্যাব সুইচিং -->
+        <div style="display: flex; background: #f1f3f5; padding: 6px; gap: 6px; border-bottom: 1px solid #eaeaea;">
+            <button class="qa-tab active" onclick="showQATab('ask', this)" style="flex: 1; padding: 10px; border: none; border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer; font-size: 14px; color: #555; transition: all 0.2s;">Ask Question</button>
+            <button class="qa-tab" onclick="showQATab('check', this)" style="flex: 1; padding: 10px; border: none; border-radius: 10px; background: transparent; font-weight: 600; cursor: pointer; font-size: 14px; color: #555; transition: all 0.2s;">My Answers</button>
+        </div>
+
+        <div style="padding: 20px;">
+            <!-- প্রশ্ন করার ট্যাব -->
             <div id="qa-ask" class="qa-tab-content active">
                 <form id="qaForm" onsubmit="submitQuestion(event)">
-                    <label>Select Subject</label>
-                    <select id="qaSubject" required style="width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:5px; font-size:15px; box-sizing:border-box;">
-                        <option value="">Select Subject</option>
+                    <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #444;">Select Subject</label>
+                    <select id="qaSubject" required style="width: 100%; padding: 12px 14px; margin-bottom: 15px; border: 1px solid #dcedc8; border-radius: 10px; font-size: 14px; box-sizing: border-box; background: #fcfcfc; outline: none; color: #333;">
+                        <option value="">-- Choose Subject --</option>
                         <option value="Physics">Physics</option>
                         <option value="Chemistry">Chemistry</option>
                         <option value="Biology">Biology</option>
@@ -392,92 +509,125 @@
                         <option value="Aptitude and Human Qualities">Aptitude and Human Qualities</option>
                     </select> 
 
-                    <label>Write Your Question</label>
-                    <textarea id="stdQuestion" placeholder="প্রশ্নটি স্পষ্ট করে লিখো..." required></textarea>
+                    <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #444;">Write Your Question</label>
+                    <textarea id="stdQuestion" placeholder="আপনার প্রশ্নটি এখানে বিস্তারিত লিখুন..." required style="width: 100%; height: 110px; padding: 12px 14px; margin-bottom: 15px; border: 1px solid #dcedc8; border-radius: 10px; resize: none; box-sizing: border-box; font-size: 14px; outline: none; background: #fcfcfc;"></textarea>
 
-                    <label>Upload image</label>
-                    <div class="qa-image-buttons">
+                    <label style="display: block; margin-bottom: 6px; font-weight: 600; font-size: 13px; color: #444;">Attach Image (Optional)</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 8px;">
                         <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none" onchange="handleImageSelect(this)">
-                        <button type="button" onclick="document.getElementById('cameraInput').click()">📷 Take Photo</button>
+                        <button type="button" onclick="document.getElementById('cameraInput').click()" style="flex: 1; padding: 10px; border: none; border-radius: 10px; color: white; background: #007bff; cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 2px 6px rgba(0,123,255,0.2);">📷 Camera</button>
 
                         <input type="file" id="galleryInput" accept="image/*" style="display:none" onchange="handleImageSelect(this)">
-                        <button type="button" onclick="document.getElementById('galleryInput').click()">🖼️ Gallery</button>
+                        <button type="button" onclick="document.getElementById('galleryInput').click()" style="flex: 1; padding: 10px; border: none; border-radius: 10px; color: white; background: #6c757d; cursor: pointer; font-size: 13px; font-weight: 600; box-shadow: 0 2px 6px rgba(108,117,125,0.2);">🖼️ Gallery</button>
                     </div>
 
-                    <div id="selectedFileName">কোনো ছবি সিলেক্ট করা হয়নি</div>
+                    <div id="selectedFileName" style="font-size: 12px; color: #666; margin-bottom: 15px; font-style: italic;">কোনো ছবি সিলেক্ট করা হয়নি</div>
 
-                    <button type="submit" class="qa-submit-btn">Submit</button>
+                    <button type="submit" class="qa-submit-btn" style="width: 100%; height: 46px; background: #28a745; color: white; border: none; border-radius: 10px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 10px rgba(40,167,69,0.25);">Submit Question</button>
                 </form>
             </div>
 
-            <!-- উত্তর দেখার অংশ -->
+            <!-- উত্তর দেখার ট্যাব -->
             <div id="qa-check" class="qa-tab-content">
-                <div id="answersList">Loading...</div>
+                <div id="answersList" style="color: #444; font-size: 14px;">Loading...</div>
             </div>
         </div>
+
     </div>
+</div>
+
+<style>
+    /* ট্যাব এবং কন্টেন্ট হাইড/শো করার পারফেক্ট সিএসএস রুলস */
+    .qa-tab.active {
+        background: #ffffff !important;
+        color: #007bff !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .qa-tab-content {
+        display: none !important;
+    }
+    .qa-tab-content.active {
+        display: block !important;
+    }
+</style>
+<style>
+    /* ট্যাব অ্যাক্টিভ হওয়ার সময় সুন্দর লুক দেওয়ার জন্য */
+    .qa-tab.active {
+        background: #ffffff !important;
+        color: #007bff !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+    .qa-tab-content {
+        display: none;
+    }
+    .qa-tab-content.active {
+        display: block !important;
+    }
+</style>
+
+<style>
+    /* ট্যাব অ্যাক্টিভ হওয়ার সময় সুন্দর লুক দেওয়ার জন্য */
+    .qa-tab.active {
+        background: #ffffff !important;
+        color: #007bff !important;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+</style>
 
     <!-- বটম নেভবার -->
     <div class="bottom-nav">
-        <div class="nav-item" onclick="show('home')"><span>🏠</span><br>Home</div>
-        <div class="nav-item" onclick="show('notice')"><span id="notice-dot" style="display:none;" class="dot"></span><span>🔔</span><br>Notice</div>
-        <div class="nav-item" onclick="show('qa-portal')"><span>💬</span><br>Q&A</div>
-        <div class="nav-item" onclick="show('profile')"><span>👤</span><br>Profile</div>
+        <div class="nav-item active" onclick="show('home')"><span>🏠</span>Home</div>
+        <div class="nav-item" onclick="show('notice')"><span id="notice-dot" class="dot"></span><span>🔔</span>Notice</div>
+        <div class="nav-item" onclick="show('qa-portal')"><span>❓</span>Q&A</div>
+        <div class="nav-item" onclick="show('profile')"><span>👤</span>Profile</div>
     </div>
 
-    <div id="noticeBox" style="background: #fff3cd; color: #856404; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid #ffc107; display: none; font-weight: 500;">
-    📢 <span id="noticeContent"></span>
-</div>
-
-<script>
-window.addEventListener('load', function() {
-    fetch(`${SCRIPT_URL}?action=getNotice`)
-    .then(res => res.json())
-    .then(data => {
-        if(data && data.notice) {
-            document.getElementById('noticeContent').innerText = data.notice;
-            document.getElementById('noticeBox').style.display = 'block';
-        }
-    });
-});
-</script>
-
+    <!-- স্ক্রিপ্ট অংশ -->
     <script>
-     // ১. মাস্কিং ফাংশনটি এখানে থাকবে
-function maskUserId(id) {
-    if (!id) return "";
-    let strId = String(id).trim();
-    if (strId.length <= 2) return strId;
-    let lastTwo = strId.slice(-2);
-    let maskedPart = "*".repeat(strId.length - 2);
-    return maskedPart + lastTwo;
-}
+        window.addEventListener('load', function() {
+            fetch(`${SCRIPT_URL}?action=getNotice`)
+            .then(res => res.json())
+            .then(data => {
+                if(data && data.notice) {
+                    document.getElementById('noticeContent').innerText = data.notice;
+                    document.getElementById('noticeBox').style.display = 'block';
+                }
+            });
+        });
 
-// ২. পেজ লোড হলে আইডি মাস্ক করে দেখানোর জন্য
-document.addEventListener("DOMContentLoaded", function() {
-    if (localStorage.getItem("isLoggedIn") === "true") {
-        var rawId = localStorage.getItem("userId") || "";
-        
-        document.getElementById('displayname').innerText = localStorage.getItem("userName") || "";
-        document.getElementById('displayid').innerText = maskUserId(rawId);
-        document.getElementById('displaybatch').innerText = localStorage.getItem("userBatch") || "";
-        document.getElementById('displaycollege').innerText = localStorage.getItem("userCollege") || "";
-        if(document.getElementById('displayresult')) {
-            document.getElementById('displayresult').innerText = localStorage.getItem("userResult") || "";
+        function maskUserId(id) {
+            if (!id) return "";
+            let strId = String(id).trim();
+            if (strId.length <= 2) return strId;
+            let lastTwo = strId.slice(-2);
+            let maskedPart = "*".repeat(strId.length - 2);
+            return maskedPart + lastTwo;
         }
 
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('home').style.display = 'block';
-    }
-});
+        document.addEventListener("DOMContentLoaded", function() {
+            if (localStorage.getItem("isLoggedIn") === "true") {
+                var rawId = localStorage.getItem("userId") || "";
+                
+                document.getElementById('displayname').innerText = localStorage.getItem("userName") || "";
+                document.getElementById('displayid').innerText = maskUserId(rawId);
+                document.getElementById('displaybatch').innerText = localStorage.getItem("userBatch") || "";
+                document.getElementById('displaycollege').innerText = localStorage.getItem("userCollege") || "";
+                if(document.getElementById('displayresult')) {
+                    document.getElementById('displayresult').innerText = localStorage.getItem("userResult") || "";
+                }
+
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('home').style.display = 'block';
+            }
+        });
+
         function checkInternetConnection() {
             if (!navigator.onLine) {
-                alert("No internet!");
+                alert("No internet connection!");
                 return false;
             }
             return true;
         }
-
 
         let pageHistory = ['home'];
 
@@ -502,8 +652,46 @@ document.addEventListener("DOMContentLoaded", function() {
             }
 
             document.querySelectorAll('.sub-page').forEach(div => div.style.display = 'none');
-            document.getElementById(pageId).style.display = 'block';
+            
+            // চ্যাট পেজের জন্য flex এবং অন্য পেজের জন্য block হবে
+            let targetPage = document.getElementById(pageId);
+            if (pageId === 'chat-portal') {
+                targetPage.style.display = 'flex';
+            } else {
+                targetPage.style.display = 'block';
+            }
+
             localStorage.setItem('currentActivePage', pageId);
+
+            // বটম নেভবারের অ্যাক্টিভ ক্লাস আপডেট
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if (pageId === 'home') document.querySelectorAll('.nav-item')[0].classList.add('active');
+            if (pageId === 'notice') document.querySelectorAll('.nav-item')[1].classList.add('active');
+            if (pageId === 'qa-portal') document.querySelectorAll('.nav-item')[2].classList.add('active');
+            if (pageId === 'profile') document.querySelectorAll('.nav-item')[3].classList.add('active');
+
+            let bottomNav = document.querySelector('.bottom-nav');
+            if (bottomNav) {
+                if (pageId === 'chat-portal') {
+                    bottomNav.style.display = 'none';
+                } else {
+                    bottomNav.style.display = 'flex';
+                }
+            }
+
+            if (pageId === 'notice') {
+                document.getElementById('notice-dot').style.display = 'none';
+                let currentNotice = document.getElementById('noticeContent').innerText;
+                if (currentNotice) {
+                    localStorage.setItem('lastSeenNotice', currentNotice);
+                }
+            }
+
+            if (pageId === 'chat-portal') {
+                let userBatch = localStorage.getItem("userBatch") || "General";
+                document.getElementById('chatHeaderTitle').innerText = "Batch: " + userBatch;
+                loadBatchMessages();
+            }
 
             if (!isBack) {
                 if (pageHistory[pageHistory.length - 1] !== pageId) {
@@ -521,213 +709,106 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         });
 
+        async function saveData() {
+            if (!checkInternetConnection()) return;
 
-async function saveData() {
-    if (!checkInternetConnection()) return;
+            var idInput = document.getElementById('userid').value.trim().toLowerCase();
+            var githubUrl = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID?t=" + new Date().getTime();
 
-    var idInput = document.getElementById('userid').value.trim().toLowerCase();
-    var githubUrl = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID?t=" + new Date().getTime();
+            try {
+                var response = await fetch(githubUrl);
+                var text = await response.text();
+                text = text.replace(/^\uFEFF/, '');
+                var lines = text.split(/\r?\n/);
+                var isValid = false;
+                var matchedName = "", matchedBatch = "", matchedCollege = "", matchedResult = "";
+                var allowedChapters = [];
 
-    try {
-        var response = await fetch(githubUrl);
-        var text = await response.text();
-        text = text.replace(/^\uFEFF/, '');
-        var lines = text.split(/\r?\n/);
-        var isValid = false;
-        var matchedName = "", matchedBatch = "", matchedCollege = "", matchedResult = "";
-        var allowedChapters = [];
+                for (var i = 0; i < lines.length; i++) {
+                    var line = lines[i].trim();
+                    if (!line) continue;
 
-        for (var i = 0; i < lines.length; i++) {
-            var line = lines[i].trim();
-            if (!line) continue;
-
-            var parts = line.split(',').map(item => item.trim());
-            if (parts.length >= 6) {
-                var fileDataId = parts[0].toLowerCase();
-                if (fileDataId === idInput) {
-                    isValid = true;
-                    matchedName = parts[1]; 
-                    matchedBatch = parts[2];
-                    matchedCollege = parts[3];
-                    matchedResult = parts[4];
-                    allowedChapters = parts.slice(5);
-                    break;
-                }
-            }
-        }
-
-        if (!isValid) {
-            alert("Wrong ID");
-            return;
-        }
-
-        // ১. এই ব্রাউজার/ফোনের জন্য একটি ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
-        let deviceId = localStorage.getItem("device_uuid");
-        if (!deviceId) {
-            deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
-            localStorage.setItem("device_uuid", deviceId);
-        }
-
-        // ২. গুগল শিটে চেক করা যে এই আইডি ইতিমধ্যে অন্য কোনো ডিভাইস বা ব্রাউজারে লগইন করা আছে কিনা
-        let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
-        let checkRes = await fetch(checkUrl);
-        let checkData = await checkRes.json();
-
-        if (checkData.status === "blocked") {
-            alert("❌ এই আইডিটি ইতিমধ্যে অন্য একটি ডিভাইস বা ব্রাউজারে লগইন করা আছে! একটি আইডি দিয়ে একাধিক ডিভাইসে প্রবেশ করা নিষেধ।");
-            return;
-        }
-
-        // ৩. সফল হলে লোকাল স্টোরেজে সেভ করা
-        localStorage.setItem("isLoggedIn", "true");
-        localStorage.setItem("userName", matchedName);
-        localStorage.setItem("userId", idInput);
-        localStorage.setItem("userBatch", matchedBatch);
-        localStorage.setItem("userCollege", matchedCollege);
-        localStorage.setItem("userResult", matchedResult);
-        localStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
-        
-
-        document.getElementById('displayname').innerText = matchedName;
-        document.getElementById('displayid').innerText = maskUserId(idInput);
-        document.getElementById('displaybatch').innerText = matchedBatch; 
-        document.getElementById('displaycollege').innerText = matchedCollege; 
-        document.getElementById('displayresult').innerText = matchedResult; 
-
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('home').style.display = 'block';
-
-    } catch (error) {
-        console.error(error);
-        alert("Internet Problem!");
-    }
-}
-
-        document.addEventListener("DOMContentLoaded", function() {
-            var buttons = document.querySelectorAll('button');
-            buttons.forEach(function(btn) {
-                var onclickAttr = btn.getAttribute('onclick');
-                if (onclickAttr && (onclickAttr.includes("drive.google.com") || onclickAttr.includes("window.open") || onclickAttr.includes("http"))) {
-                    var urlMatch = onclickAttr.match(/'([^']+)'/);
-                    if (urlMatch && urlMatch[1]) {
-                        var url = urlMatch[1];
-                        btn.removeAttribute('onclick');
-                        btn.onclick = function() { window.open(url, '_blank'); };
+                    var parts = line.split(',').map(item => item.trim());
+                    if (parts.length >= 6) {
+                        var fileDataId = parts[0].toLowerCase();
+                        if (fileDataId === idInput) {
+                            isValid = true;
+                            matchedName = parts[1]; 
+                            matchedBatch = parts[2];
+                            matchedCollege = parts[3];
+                            matchedResult = parts[4];
+                            allowedChapters = parts.slice(5);
+                            break;
+                        }
                     }
                 }
-            });
-        });
-function logout() {
-    var userId = localStorage.getItem("userId");
-    var deviceId = localStorage.getItem("device_uuid");
 
-    // সার্ভারে বা গুগল শিটে রিকোয়েস্ট পাঠিয়ে এই আইডির ডিভাইস বাইন্ডিং ক্লিয়ার করা (যদি ব্যাকএন্ডে অপশন থাকে)
-    if (userId && deviceId) {
-        fetch(`${SCRIPT_URL}?action=clearDevice&id=${encodeURIComponent(userId)}&deviceId=${encodeURIComponent(deviceId)}`)
-        .catch(err => console.log(err));
-    }
+                if (!isValid) {
+                    alert("Wrong ID!");
+                    return;
+                }
 
-    // ব্রাউজারের লোকাল স্টোরেজ ক্লিয়ার করা
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("userId");
-    localStorage.removeItem("userBatch");
-    localStorage.removeItem("userCollege");
-    localStorage.removeItem("userResult");
-    localStorage.removeItem("userAllowedChapters");
-    // (Note: device_uuid টা রেখে দিতে পারেন অথবা চাইলে এটাও মুছে দিতে পারেন)
+                let deviceId = localStorage.getItem("device_uuid");
+                if (!deviceId) {
+                    deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
+                    localStorage.setItem("device_uuid", deviceId);
+                }
 
-    // পেজ রিফ্রেশ বা লগইন স্ক্রিনে ফিরিয়ে নেওয়া
-    document.querySelectorAll('.sub-page').forEach(div => div.style.display = 'none');
-    document.getElementById('login-screen').style.display = 'block';
-    document.getElementById('userid').value = "";
-    
-    // পেজ রিলোড করা সবচেয়ে নিরাপদ
-    location.reload();
-}
-window.addEventListener('load', function() {
-    if (!checkInternetConnection()) return;
+                let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
+                let checkRes = await fetch(checkUrl);
+                let checkData = await checkRes.json();
 
-    // নোটিশ ফেচ করা এবং লাল ডট কন্ট্রোল করা
-    fetch(`${SCRIPT_URL}?action=getNotice`)
-    .then(res => res.json())
-    .then(data => {
-        if(data && data.notice) {
-            document.getElementById('noticeContent').innerText = data.notice;
-            document.getElementById('noticeBox').style.display = 'block';
-            
-            // লোকাল স্টোরেজের সাথে মিলিয়ে লাল ডট দেখানো
-            let lastSeenNotice = localStorage.getItem('lastSeenNotice');
-            if (lastSeenNotice !== data.notice) {
-                document.getElementById('notice-dot').style.display = 'block';
+                if (checkData.status === "blocked") {
+                    alert("❌ এই আইডিটি ইতিমধ্যে অন্য একটি ফোনে লগইন করা আছে! একটি আইডি দিয়ে একাধিক ফোনে প্রবেশ করা নিষেধ।");
+                    return;
+                }
+
+                localStorage.setItem("isLoggedIn", "true");
+                localStorage.setItem("userName", matchedName);
+                localStorage.setItem("userId", idInput);
+                localStorage.setItem("userBatch", matchedBatch);
+                localStorage.setItem("userCollege", matchedCollege);
+                localStorage.setItem("userResult", matchedResult);
+                localStorage.setItem("userAllowedChapters", JSON.stringify(allowedChapters));
+                
+                document.getElementById('displayname').innerText = matchedName;
+                document.getElementById('displayid').innerText = maskUserId(idInput);
+                document.getElementById('displaybatch').innerText = matchedBatch; 
+                document.getElementById('displaycollege').innerText = matchedCollege; 
+                document.getElementById('displayresult').innerText = matchedResult; 
+
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('home').style.display = 'block';
+
+            } catch (error) {
+                console.error(error);
+                alert("Internet Connection Error!");
             }
         }
-    })
-    .catch(err => console.error("Notice error:", err));
-});
-function show(pageId, isBack = false) {
-    if (!checkInternetConnection()) return;
 
-    let openPages = [
-        'home', 'notice', 'profile', 'bangla',
-        'chemistry', 'physics', 'biology', 'math', 'ict',
-        'physics-1st', 'physics-2nd', 
-        'chemistry-1st', 'chemistry-2nd',
-        'biology-1st', 'biology-2nd',
-        'math-1st', 'math-2nd', 'chat-portal', 'med-ad', 'english', 'eng-1st', 'eng-2nd', 'qa-portal'
-    ];
-
-    if (!openPages.includes(pageId)) {
-        let allowed = JSON.parse(localStorage.getItem("userAllowedChapters") || "[]");
-        if (!allowed.includes("all") && !allowed.includes(pageId)) {
-            alert("Not available for you");
-            return;
+        function logout() {
+            localStorage.clear();
+            location.reload();
         }
-    }
 
-    document.querySelectorAll('.sub-page').forEach(div => div.style.display = 'none');
-    document.getElementById(pageId).style.display = 'block';
-    localStorage.setItem('currentActivePage', pageId);
+        window.addEventListener('load', function() {
+            if (!checkInternetConnection()) return;
 
-    // ১. চ্যাট পেজে প্রবেশ করলে বটম নেভ বার হাইড হবে, অন্য পেজে থাকলে শোগ করবে
-    let bottomNav = document.querySelector('.bottom-nav');
-    if (bottomNav) {
-        if (pageId === 'chat-portal') {
-            bottomNav.style.display = 'none';
-        } else {
-            bottomNav.style.display = 'flex';
-        }
-    }
-
-    // ইউজার নোটিশ পেজে গেলে লাল ডট হাইড হয়ে যাবে এবং নোটিশ সিন হয়ে যাবে
-    if (pageId === 'notice') {
-        document.getElementById('notice-dot').style.display = 'none';
-        let currentNotice = document.getElementById('noticeContent').innerText;
-        if (currentNotice) {
-            localStorage.setItem('lastSeenNotice', currentNotice);
-        }
-    }
-
-    // চ্যাট পেজে গেলে ব্যাচের নাম সেট হবে এবং মেসেজ লোড হবে
-    if (pageId === 'chat-portal') {
-        let userBatch = localStorage.getItem("userBatch") || "General";
-        document.getElementById('chatHeaderTitle').innerText = "Batch:" + userBatch;
-        loadBatchMessages();
-    }
-    // চ্যাট পেজের জন্য flex এবং অন্য পেজের জন্য block হবে
-    if (pageId === 'chat-portal') {
-        document.getElementById(pageId).style.display = 'flex';
-    } else {
-        document.getElementById(pageId).style.display = 'block';
-    }
-
-    if (!isBack) {
-        if (pageHistory[pageHistory.length - 1] !== pageId) {
-            pageHistory.push(pageId);
-        }
-        history.pushState({page: pageId}, "");
-    }
-}
+            fetch(`${SCRIPT_URL}?action=getNotice`)
+            .then(res => res.json())
+            .then(data => {
+                if(data && data.notice) {
+                    document.getElementById('noticeContent').innerText = data.notice;
+                    document.getElementById('noticeBox').style.display = 'block';
+                    
+                    let lastSeenNotice = localStorage.getItem('lastSeenNotice');
+                    if (lastSeenNotice !== data.notice) {
+                        document.getElementById('notice-dot').style.display = 'block';
+                    }
+                }
+            })
+            .catch(err => console.error("Notice error:", err));
+        });
 
         // Q&A SCRIPT
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJVKotJMOZ3fTtLlBPQUNLKs16b79ceM_aBHBFrShAh3E1dPowF2LmSq0v1BGedKhqpQ/exec";
@@ -764,12 +845,12 @@ function show(pageId, isBack = false) {
 
             const student = getQAStudent();
             if (!student.id || !student.name) {
-                alert("Login first");
+                alert("Please login first");
                 return;
             }
 
             const btn = document.querySelector('.qa-submit-btn');
-            btn.innerText = "Uploading";
+            btn.innerText = "Uploading...";
             btn.disabled = true;
 
             const subjectText = document.getElementById('qaSubject').value;
@@ -777,7 +858,7 @@ function show(pageId, isBack = false) {
 
             if (!subjectText) {
                 alert("Please select subject");
-                btn.innerText = "Submit";
+                btn.innerText = "Submit Question";
                 btn.disabled = false;
                 return;
             }
@@ -801,18 +882,18 @@ function show(pageId, isBack = false) {
                 })
                 .then(res => res.text())
                 .then(() => {
-                    alert("Sumitted");
+                    alert("Submitted Successfully!");
                     document.getElementById('qaForm').reset();
                     selectedFile = null;
-                    document.getElementById('selectedFileName').innerText = "No image";
-                    btn.innerText = "Submit";
+                    document.getElementById('selectedFileName').innerText = "কোনো ছবি সিলেক্ট করা হয়নি";
+                    btn.innerText = "Submit Question";
                     btn.disabled = false;
                     showQATab('check', document.querySelectorAll('.qa-tab')[1]);
                 })
                 .catch(error => {
                     console.error(error);
-                    alert("Something Wrong!");
-                    btn.innerText = "Submit";
+                    alert("Something went wrong!");
+                    btn.innerText = "Submit Question";
                     btn.disabled = false;
                 });
             }
@@ -824,8 +905,8 @@ function show(pageId, isBack = false) {
                     sendQuestion(base64Data, selectedFile.type, selectedFile.name);
                 };
                 reader.onerror = function() {
-                    alert("ছবি পড়তে সমস্যা হয়েছে!");
-                    btn.innerText = "Submit";
+                    alert("Failed to read image!");
+                    btn.innerText = "Submit Question";
                     btn.disabled = false;
                 };
                 reader.readAsDataURL(selectedFile);
@@ -840,241 +921,157 @@ function show(pageId, isBack = false) {
             })[char]);
         }
 
- function loadAnswers() {
-    if (!checkInternetConnection()) return;
-    const student = getQAStudent();
-    if (!student.id) {
-        document.getElementById('answersList').innerText = "প্রথমে লগইন করো!";
-        return;
-    }
-
-    const listDiv = document.getElementById('answersList');
-    listDiv.innerText = "Loading";
-
-    fetch(`${SCRIPT_URL}?action=getStudentQA&id=${encodeURIComponent(student.id)}`)
-    .then(res => res.json())
-    .then(data => {
-        if (!Array.isArray(data) || data.length === 0) {
-            listDiv.innerHTML = "<p>তোমার কোনো প্রশ্ন বা উত্তর পাওয়া যায়নি।</p>";
-            return;
-        }
-
-        let html = "";
-        data.slice().reverse().forEach(item => {
-            const answerText = String(item.answer || "").trim();
-            
-            const isAnswered = answerText !== "";
-            let studentImgHtml = "";
-
-            // স্টুডেন্টের নিজের আপলোড করা ছবি
-            if (item.imageUrl) {
-                let sImg = item.imageUrl;
-                if (sImg.includes("drive.google.com")) {
-                    let m = sImg.match(/\/d\/(.*?)\/|\?id=(.*?)(&|$)/);
-                    let id = m ? (m[1] || m[2]) : null;
-                    if (id) sImg = `https://lh3.googleusercontent.com/d/${id}`;
-                }
-                studentImgHtml = `<p style="margin-top:10px;"><br><a href="${item.imageUrl}" target="_blank"><img src="${sImg}" style="max-width:200px; border-radius:6px; border:1px solid #ddd;"></a></p>`;
+        function loadAnswers() {
+            if (!checkInternetConnection()) return;
+            const student = getQAStudent();
+            if (!student.id) {
+                document.getElementById('answersList').innerText = "প্রথমে লগইন করো!";
+                return;
             }
 
-            // শিক্ষকের উত্তরের টেক্সট থেকে লিংক খুঁজে ছবি আকারে দেখানো
-            let formattedAnswer = escapeQAHTML(answerText);
-            const urlRegex = /(https?:\/\/[^\s]+)/g;
-            formattedAnswer = formattedAnswer.replace(urlRegex, function(url) {
-                let imgUrl = url;
-                if (imgUrl.includes("drive.google.com")) {
-                    let m = imgUrl.match(/\/d\/(.*?)\/|\?id=(.*?)(&|$)/);
-                    let id = m ? (m[1] || m[2]) : null;
-                    if (id) imgUrl = `https://lh3.googleusercontent.com/d/${id}`;
+            const listDiv = document.getElementById('answersList');
+            listDiv.innerText = "Loading...";
+
+            fetch(`${SCRIPT_URL}?action=getStudentQA&id=${encodeURIComponent(student.id)}`)
+            .then(res => res.json())
+            .then(data => {
+                if (!Array.isArray(data) || data.length === 0) {
+                    listDiv.innerHTML = "<p style='text-align:center; color:#775;'>তোমার কোনো প্রশ্ন বা উত্তর পাওয়া যায়নি।</p>";
+                    return;
                 }
-                return `<br><a href="${url}" target="_blank"><img src="${imgUrl}" style="max-width:220px; border-radius:6px; border:1px solid #ccc; margin-top:8px; display:block;"></a>`;
+
+                let html = "";
+                data.slice().reverse().forEach(item => {
+                    const answerText = String(item.answer || "").trim();
+                    const isAnswered = answerText !== "";
+                    let studentImgHtml = "";
+
+                    if (item.imageUrl) {
+                        let sImg = item.imageUrl;
+                        if (sImg.includes("drive.google.com")) {
+                            let m = sImg.match(/\/d\/(.*?)\/|\?id=(.*?)(&|$)/);
+                            let id = m ? (m[1] || m[2]) : null;
+                            if (id) sImg = `https://lh3.googleusercontent.com/d/${id}`;
+                        }
+                        studentImgHtml = `<p style="margin-top:10px;"><a href="${item.imageUrl}" target="_blank"><img src="${sImg}" style="max-width:180px; border-radius:6px; border:1px solid #ddd; display:block;"></a></p>`;
+                    }
+
+                    let formattedAnswer = escapeQAHTML(answerText);
+                    const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    formattedAnswer = formattedAnswer.replace(urlRegex, function(url) {
+                        let imgUrl = url;
+                        if (imgUrl.includes("drive.google.com")) {
+                            let m = imgUrl.match(/\/d\/(.*?)\/|\?id=(.*?)(&|$)/);
+                            let id = m ? (m[1] || m[2]) : null;
+                            if (id) imgUrl = `https://lh3.googleusercontent.com/d/${id}`;
+                        }
+                        return `<br><a href="${url}" target="_blank"><img src="${imgUrl}" style="max-width:200px; border-radius:6px; border:1px solid #ccc; margin-top:6px; display:block;"></a>`;
+                    });
+
+                    html += `
+                        <div style="background:#fff; padding:15px; margin-bottom:12px; border-radius:8px; border: 1px solid #eee; border-left:4px solid #007bff; box-shadow: 0 1px 3px rgba(0,0,0,0.02);">
+                            <p style="margin:0 0 6px;"><strong>Subject:</strong> ${escapeQAHTML(item.subject || 'General')}</p>
+                            <p style="margin:0 0 8px;"><strong>Question:</strong> ${escapeQAHTML(item.question)}</p>
+                            ${studentImgHtml}
+                            <hr style="border:0; border-top:1px solid #f1f1f1; margin:10px 0;">
+                            <p style="margin:0;"><strong>Answer:</strong><br>${isAnswered ? formattedAnswer.replace(/\n/g, '<br>') : '<span style="color:#d9534f; font-weight:600;">এখনো উত্তর দেওয়া হয়নি</span>'}</p>
+                        </div>
+                    `;
+                });
+                listDiv.innerHTML = html;
+            })
+            .catch(error => {
+                console.error(error);
+                listDiv.innerText = "ডেটা লোড করতে সমস্যা হয়েছে।";
             });
-
-            html += `
-                <div style="background:#fff; padding:18px; margin-bottom:15px; border-radius:8px; box-shadow:0 1px 4px rgba(0,0,0,0.08); border-left:4px solid #007bff;">
-                    <p><strong>Subject: </strong> ${escapeQAHTML(item.subject || 'General')}</p>
-                    <p><strong>Question: </strong> ${escapeQAHTML(item.question)}</p>
-                    ${studentImgHtml}
-                    <hr style="border:0; border-top:1px solid #eee; margin:12px 0;">
-                    <p><strong>Answer</strong><br>${isAnswered ? formattedAnswer.replace(/\n/g, '<br>') : '<span style="color:orange; font-weight:600;">এখনো উত্তর দেওয়া হয়নি</span>'}</p>
-                </div>
-            `;
-        });
-        listDiv.innerHTML = html;
-    })
-    .catch(error => {
-        console.error(error);
-        listDiv.innerText = "ডেটা লোড করতে সমস্যা হয়েছে।";
-    });
-}
-window.addEventListener('load', function() {
-    const loader = document.getElementById('illusion-loader');
-    setTimeout(() => {
-        loader.classList.add('loader-hidden');
-    }, 1800); // পেজ লোড হওয়ার পর আধ সেকেন্ড রেখে তারপর মিলিয়ে যাবে
-});
-
-// চ্যাট শিটের নতুন অ্যাপস স্ক্রিপ্ট ইউআরএল
-const CHAT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxL5l3yW2VaeBbgksUVALicC0WN-toOdHVBDxpSzulV8KrcxKpKWutJyD8_UUML0j1VBg/exec";
-
-// ১. চ্যাট মেসেজ লোড করার ফাংশন
-async function loadBatchMessages() {
-    let batch = localStorage.getItem("userBatch") || "";
-    try {
-        let res = await fetch(`${CHAT_SCRIPT_URL}?action=getMessages&batch=${encodeURIComponent(batch)}`);
-        let data = await res.json();
-        
-        let chatBox = document.getElementById('chatMessages');
-        chatBox.innerHTML = "";
-        
-        if (!Array.isArray(data) || data.length === 0) {
-            chatBox.innerHTML = "<p style='text-align:center; color:#888; margin-top:20px;'> No message!</p>";
-            return;
         }
 
-        data.forEach(msg => {
-            chatBox.innerHTML += `
-                <div style="margin-bottom: 10px; background: #fff; padding: 10px 12px; border-radius: 6px; border: 1px solid #eee; text-align: left;">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-                        <b style="color:#007bff;">${msg.name}</b> 
-                        <span style="font-size: 11px; color: #888;">(${msg.batch})</span>
-                    </div>
-                    <span style="font-size: 14px; color: #333; word-break: break-all;">${msg.message}</span>
-                    <div style="font-size: 10px; color: gray; text-align: right; margin-top:4px;">${msg.time}</div>
-                </div>`;
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('illusion-loader');
+            setTimeout(() => {
+                loader.classList.add('loader-hidden');
+            }, 1200);
         });
-        chatBox.scrollTop = chatBox.scrollHeight;
-    } catch (e) {
-        console.error("Chat load error:", e);
-        document.getElementById('chatMessages').innerHTML = "<p style='color:red; text-align:center;'>Something wrong!</p>";
-    }
-}
 
-// ২. চ্যাট মেসেজ পাঠানোর ফাংশন
-async function sendChatMessage() {
-    let input = document.getElementById('chatInput');
-    let msg = input.value.trim();
-    if (!msg) return;
+        const CHAT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxL5l3yW2VaeBbgksUVALicC0WN-toOdHVBDxpSzulV8KrcxKpKWutJyD8_UUML0j1VBg/exec";
 
-    let payload = {
-        action: "sendMessage",
-        id: localStorage.getItem("userId") || "unknown",
-        name: localStorage.getItem("userName") || "Student",
-        batch: localStorage.getItem("userBatch") || "",
-        message: msg
-    };
+        async function loadBatchMessages() {
+            let batch = localStorage.getItem("userBatch") || "";
+            try {
+                let res = await fetch(`${CHAT_SCRIPT_URL}?action=getMessages&batch=${encodeURIComponent(batch)}`);
+                let data = await res.json();
+                
+                let chatBox = document.getElementById('chatMessages');
+                chatBox.innerHTML = "";
+                
+                if (!Array.isArray(data) || data.length === 0) {
+                    chatBox.innerHTML = "<p style='text-align:center; color:#888; margin-top:20px;'>No messages yet!</p>";
+                    return;
+                }
 
-    try {
-        let res = await fetch(CHAT_SCRIPT_URL, {
-            method: "POST",
-            body: JSON.stringify(payload)
-        });
-        let result = await res.json();
-        
-        if (result.status === "success") {
-            input.value = "";
-            loadBatchMessages();
+                data.forEach(msg => {
+                    chatBox.innerHTML += `
+                        <div style="margin-bottom: 10px; background: #fff; padding: 10px 12px; border-radius: 8px; border: 1px solid #e1e4e8; text-align: left;">
+                            <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+                                <b style="color:#007bff; font-size: 13px;">${msg.name}</b> 
+                                <span style="font-size: 11px; color: #888;">(${msg.batch})</span>
+                            </div>
+                            <span style="font-size: 13px; color: #333; word-break: break-all;">${msg.message}</span>
+                            <div style="font-size: 10px; color: #999; text-align: right; margin-top:4px;">${msg.time}</div>
+                        </div>`;
+                });
+                chatBox.scrollTop = chatBox.scrollHeight;
+            } catch (e) {
+                console.error("Chat load error:", e);
+                document.getElementById('chatMessages').innerHTML = "<p style='color:red; text-align:center;'>Failed to load messages!</p>";
+            }
         }
-    } catch (e) {
-        console.error("Send error:", e);
-        alert("Not sent");
-    }
-}
 
-// ৩. এন্টার প্রেস করলে সেন্ড করার ফাংশন
-function handleChatKeyPress(event) {
-    if (event.key === 'Enter') {
-        sendChatMessage();
-    }
-}
+        async function sendChatMessage() {
+            let input = document.getElementById('chatInput');
+            let msg = input.value.trim();
+            if (!msg) return;
 
+            let payload = {
+                action: "sendMessage",
+                id: localStorage.getItem("userId") || "unknown",
+                name: localStorage.getItem("userName") || "Student",
+                batch: localStorage.getItem("userBatch") || "",
+                message: msg
+            };
 
+            try {
+                let res = await fetch(CHAT_SCRIPT_URL, {
+                    method: "POST",
+                    body: JSON.stringify(payload)
+                });
+                let result = await res.json();
+                
+                if (result.status === "success") {
+                    input.value = "";
+                    loadBatchMessages();
+                }
+            } catch (e) {
+                console.error("Send error:", e);
+                alert("Message not sent!");
+            }
+        }
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
     </script>
-    <style>#illusion-loader {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #0f172a;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
-}
 
-.loader-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
-}
-
-.loader-img {
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 4px solid #007bff;
-    box-shadow: 0 0 20px rgba(0, 123, 255, 0.5);
-    margin-bottom: 70px;
-    animation: fadeInScale 1.2s ease-in-out infinite alternate;
-}
-
-.loader-text {
-    color: #ffffff;
-    font-size: 18px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    animation: fadeInText 1s ease-in-out;
-}
-
-.illusion-ring {
-    width: 150px;
-    height: 150px;
-    position: absolute;
-    top: -20px;
-    border: 7px solid transparent;
-    border-top-color: #007bff;
-    border-bottom-color: #ff007b;
-    border-radius: 50%;
-    animation: illusionSpin 1.2s linear infinite;
-    pointer-events: none;
-}
-
-@keyframes illusionSpin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-@keyframes fadeInScale {
-    0% { transform: scale(0.9); opacity: 0.7; }
-    100% { transform: scale(1.1); opacity: 1; }
-}
-
-@keyframes fadeInText {
-    0% { opacity: 0; transform: translateY(10px); }
-    100% { opacity: 1; transform: translateY(0); }
-}
-
-.loader-hidden {
-    opacity: 0;
-    visibility: hidden;
-}
-</style>
-
-<div id="illusion-loader">
-    <div class="loader-content">
-        <img src="https://i.postimg.cc/DfxcWtj0/MB-logo-(1).png"  alt="Logo" class="loader-img">
-        <div class="loader-text">MED Bridge Academy</div>
-        <div class="illusion-ring"></div>
+    <!-- স্প্ল্যাশ স্ক্রিন লোডার -->
+    <div id="illusion-loader">
+        <div class="loader-content">
+            <img src="https://i.postimg.cc/DfxcWtj0/MB-logo-(1).png" alt="Logo" class="loader-img">
+            <div class="loader-text">MED Bridge Academy</div>
+            <div class="illusion-ring"></div>
+        </div>
     </div>
-</div>
 
-
-    
 </body>
 </html>
