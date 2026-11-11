@@ -568,13 +568,13 @@ async function saveData() {
             localStorage.setItem("device_uuid", deviceId);
         }
 
-        // ২. গুগল শিটে চেক করা যে I কলামে অলরেডি অন্য কোনো ডিভাইস আইডি আছে কিনা
+        // ২. গুগল শিটে চেক করা যে এই আইডি ইতিমধ্যে অন্য কোনো ডিভাইস বা ব্রাউজারে লগইন করা আছে কিনা
         let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
         let checkRes = await fetch(checkUrl);
         let checkData = await checkRes.json();
 
         if (checkData.status === "blocked") {
-            alert("❌ এই আইডিটি ইতিমধ্যে অন্য একটি ফোনে লগইন করা আছে! একটি আইডি দিয়ে একাধিক ফোনে প্রবেশ করা নিষেধ।");
+            alert("❌ এই আইডিটি ইতিমধ্যে অন্য একটি ডিভাইস বা ব্রাউজারে লগইন করা আছে! একটি আইডি দিয়ে একাধিক ডিভাইসে প্রবেশ করা নিষেধ।");
             return;
         }
 
@@ -617,12 +617,34 @@ async function saveData() {
                 }
             });
         });
+function logout() {
+    var userId = localStorage.getItem("userId");
+    var deviceId = localStorage.getItem("device_uuid");
 
-        function logout() {
-          
-            localStorage.clear();
-            location.reload();
-        }
+    // সার্ভারে বা গুগল শিটে রিকোয়েস্ট পাঠিয়ে এই আইডির ডিভাইস বাইন্ডিং ক্লিয়ার করা (যদি ব্যাকএন্ডে অপশন থাকে)
+    if (userId && deviceId) {
+        fetch(`${SCRIPT_URL}?action=clearDevice&id=${encodeURIComponent(userId)}&deviceId=${encodeURIComponent(deviceId)}`)
+        .catch(err => console.log(err));
+    }
+
+    // ব্রাউজারের লোকাল স্টোরেজ ক্লিয়ার করা
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("userBatch");
+    localStorage.removeItem("userCollege");
+    localStorage.removeItem("userResult");
+    localStorage.removeItem("userAllowedChapters");
+    // (Note: device_uuid টা রেখে দিতে পারেন অথবা চাইলে এটাও মুছে দিতে পারেন)
+
+    // পেজ রিফ্রেশ বা লগইন স্ক্রিনে ফিরিয়ে নেওয়া
+    document.querySelectorAll('.sub-page').forEach(div => div.style.display = 'none');
+    document.getElementById('login-screen').style.display = 'block';
+    document.getElementById('userid').value = "";
+    
+    // পেজ রিলোড করা সবচেয়ে নিরাপদ
+    location.reload();
+}
 window.addEventListener('load', function() {
     if (!checkInternetConnection()) return;
 
