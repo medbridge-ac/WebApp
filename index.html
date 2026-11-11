@@ -162,6 +162,9 @@
                 `;
             }
         });
+
+
+
     </script>
 </head>
 
@@ -180,22 +183,26 @@
         <img src="https://i.postimg.cc/L8JCBQzN/icons8-facebook-messenger-48.png" width="40" height="40" alt="Logo" class="rounded-img">
     </div>
 
-    <!-- চ্যাট পোর্টাল সাব-পেইজ -->
-    <div id="chat-portal" class="sub-page" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #f4f6f9; z-index: 1500; box-sizing: border-box; padding: 12px; flex-direction: column;">
-        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-shrink: 0;">
-            <button class="paper-btn" style="background-color: #e0e0e0; color: #333; margin: 0; width: 70px; height: 38px; font-size: 13px; box-shadow:none;" onclick="show('home')">← Back</button>
-            <h3 id="chatHeaderTitle" style="margin: 0; font-size: 16px; color: #007bff;">Batch Chat Room</h3>
-        </div>
-        
-        <div id="chatMessages" style="flex: 1; padding: 12px; overflow-y: auto; font-size: 13px; background: #fff; border: 1px solid #e1e4e8; border-radius: 10px; margin-bottom: 10px; text-align: left; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
-            Loading...
-        </div>
-
-        <div style="display: flex; gap: 8px; background: #fff; padding: 8px; border: 1px solid #e1e4e8; border-radius: 10px; flex-shrink: 0; box-shadow: 0 -2px 6px rgba(0,0,0,0.03);">
-            <input type="text" id="chatInput" placeholder="Write your message..." style="flex: 1; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px;" onkeypress="handleChatKeyPress(event)">
-            <button onclick="sendChatMessage()" style="padding: 0 16px; background: #007bff; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; height: 40px; font-size: 14px;">Send</button>
-        </div>
+    <!-- CHAT PORTAL SUB-PAGE (চ্যাট সাব-পেইজ সেকশন) -->
+<div id="chat-portal" class="sub-page" style="display:none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #f4f6f9; z-index: 1500; box-sizing: border-box; padding: 12px 12px 70px 12px; flex-direction: column;">
+    
+    <!-- টপ বার ও ব্যাক বাটন -->
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px; flex-shrink: 0;">
+        <button class="paper-btn" style="background-color: #e0e0e0; color: #333; margin: 0; width: 70px; height: 35px; font-size: 13px; box-shadow:none;" onclick="show('home')">← Back</button>
+        <h3 id="chatHeaderTitle" style="margin: 0; font-size: 16px; color: #007bff;">Batch Chat Room</h3>
+    </div> 
+    
+    <!-- চ্যাট মেসেজ দেখানোর এরিয়া (এটি ওপর-নিচে স্ক্রোল হবে) -->
+    <div id="chatMessages" style="flex: 1; padding: 12px; overflow-y: auto; font-size: 13px; background: #fff; border: 1px solid #e1e4e8; border-radius: 10px; margin-bottom: 8px; text-align: left; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
+        Loading...
     </div>
+
+    <!-- ইনপুট ও সেন্ড বাটন (স্ক্রিনের নিচে নেভবারের ঠিক ওপরে স্থায়ী/ফিক্সড থাকবে) -->
+    <div style="position: fixed; bottom: 0; left: 0; width: 100%; display: flex; gap: 8px; background: #ffffff; padding: 10px 12px; border-top: 1px solid #eaeaea; z-index: 1600; box-sizing: border-box; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);">
+        <input type="text" id="chatInput" placeholder="আপনার মেসেজ লিখুন..." style="flex: 1; padding: 12px 14px; border: 1px solid #ddd; border-radius: 8px; outline: none; font-size: 14px; background: #fcfcfc;" onkeypress="handleChatKeyPress(event)">
+        <button onclick="sendChatMessage()" style="padding: 0 20px; background: #007bff; color: #fff; border: none; border-radius: 8px; cursor: pointer; font-weight: 600; height: 45px; font-size: 14px;">পাঠাও</button>
+    </div>
+</div>
 
     <!-- হোম পেজ -->
     <div id="home" class="sub-page">
@@ -443,7 +450,7 @@
             <p>Batch: <span id="displaybatch"></span></p>
             <p>College: <span id="displaycollege"></span></p>
         </div> 
-<button onclick="logout()" class="paper-btn" style="background-color: #d9534f; padding: 7px; width: 110px; color: white; margin: 5px auto;">↩️ Log Out</button>
+<button onclick="logout()" class="paper-btn" style="background-color: #d9534f; padding: 7px; width: 110px; color: white; margin: 5px auto;">↩️ Log Out</button><br>
         <div class="profile-card" style="text-align: left;">
             <h4 style="color:#044E8A; margin-top:0; font-size:15px;">My Result:</h4>
             <span id="displayresult" style="font-size: 14px; color: #555;"></span>
