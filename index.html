@@ -266,6 +266,9 @@ body[data-page="chat-portal"] #chat-fab,body[data-page="qa-portal"] #chat-fab{di
 .msg.mine .msg-name{color:rgba(255,255,255,.92)}
 .msg-batch{font-size:11px;opacity:.7}
 .msg-text{font-size:15px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}
+.msg-img{display:block;max-width:100%;max-height:260px;margin-top:6px;border-radius:12px;object-fit:cover;background:var(--surface-2)}
+.msg-img-link{display:block}
+.msg-attach{display:inline-block;margin-top:6px;font-size:13px;color:var(--primary);text-decoration:underline}
 .msg-time{font-size:10.5px;opacity:.65;text-align:right;margin-top:3px}
 .chat-input-bar{flex:none;display:flex;align-items:center;gap:10px;padding:10px 12px calc(10px + var(--safe-bottom));background:var(--surface);border-top:1px solid var(--outline)}
 .chat-input-bar input{flex:1;min-width:0;height:48px;padding:0 18px;border-radius:24px;border:1.5px solid var(--outline);background:var(--surface-2);color:var(--text);font:inherit;font-size:16px;outline:none}
@@ -994,7 +997,7 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
 <script>
 /* ==================== Config (unchanged endpoints) ==================== */
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJVKotJMOZ3fTtLlBPQUNLKs16b79ceM_aBHBFrShAh3E1dPowF2LmSq0v1BGedKhqpQ/exec";
-const CHAT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxL5l3yW2VaeBbgksUVALicC0WN-toOdHVBDxpSzulV8KrcxKpKWutJyD8_UUML0j1VBg/exec";
+const CHAT_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4msrwzKGqjEMEPbOnO4qx50tTambWl0Z85qIRoa17pQ7q4ekqAoRDpcDfcsQOwPx3bw/exec";
 
 /* ==================== Offline screen ==================== */
 window.addEventListener('load', function () {
@@ -1186,10 +1189,23 @@ async function saveData() {
   var idInput = document.getElementById('userid').value.trim().toLowerCase();
   var githubUrl = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID?t=" + new Date().getTime();
   setBusy(btn, true);
+  var step = '';
 
   try {
-    var response = await fetch(githubUrl);
-    var text = await response.text();
+    step = 'GitHub ID list';
+    var idSources = [
+      githubUrl,
+      "https://cdn.jsdelivr.net/gh/cdservicebd-coder/new-id@main/New%20ID?t=" + new Date().getTime()
+    ];
+    var text = null, lastErr = null;
+    for (var si = 0; si < idSources.length && text === null; si++) {
+      try {
+        var response = await fetch(idSources[si], { cache: 'no-store' });
+        if (!response.ok) throw new Error('HTTP ' + response.status);
+        text = await response.text();
+      } catch (fe) { lastErr = fe; }
+    }
+    if (text === null) throw lastErr || new Error('ID list load হয়নি');
     text = text.replace(/^\uFEFF/, '');
     var lines = text.split(/\r?\n/);
     var isValid = false;
@@ -1229,8 +1245,12 @@ async function saveData() {
 
     // ২. গুগল শিটে চেক করা যে I কলামে অলরেডি অন্য কোনো ডিভাইস আইডি আছে কিনা
     let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
+    step = 'Google Script (checkLogin)';
     let checkRes = await fetch(checkUrl);
-    let checkData = await checkRes.json();
+    let checkRaw = await checkRes.text();
+    let checkData;
+    try { checkData = JSON.parse(checkRaw); }
+    catch (pe) { throw new Error('Script JSON দেয়নি: ' + checkRaw.slice(0, 120)); }
 
     if (checkData.status === "blocked") {
       notify("❌ এই আইডিটি ইতিমধ্যে অন্য একটি ফোনে লগইন করা আছে! একটি আইডি দিয়ে একাধিক ফোনে প্রবেশ করা নিষেধ।", "error");
@@ -1252,7 +1272,7 @@ async function saveData() {
 
   } catch (error) {
     console.error(error);
-    notify("Internet Problem!", "error");
+    notify("Login error [" + step + "]: " + (error && error.message ? error.message : error), "error");
   } finally {
     setBusy(btn, false);
   }
@@ -1514,11 +1534,19 @@ async function loadBatchMessages() {
             <span class="msg-name">${escapeQAHTML(msg.name)}</span>
             <span class="msg-batch">(${escapeQAHTML(msg.batch)})</span>
           </div>
-          <div class="msg-text">${escapeQAHTML(msg.message)}</div>
+          ${msg.message ? `<div class="msg-text">${escapeQAHTML(msg.message)}</div>` : ''}
+          ${msg.imageUrl ? `<a class="msg-img-link" href="${escapeQAHTML(msg.imageUrl)}" target="_blank" rel="noopener noreferrer"><img class="msg-img" src="${escapeQAHTML(driveImageUrl(msg.imageUrl))}" alt="Image" loading="lazy"></a>` : ''}
           <div class="msg-time">${escapeQAHTML(msg.time)}</div>
         </div>`;
     });
     chatBox.innerHTML = html;
+    chatBox.querySelectorAll('.msg-img').forEach(img => {
+      img.addEventListener('error', function () {
+        const a = img.closest('a');
+        if (a) { a.className = 'msg-attach'; a.textContent = 'ছবি খুলুন ↗'; }
+      }, { once: true });
+      img.addEventListener('load', function () { chatBox.scrollTop = chatBox.scrollHeight; }, { once: true });
+    });
     chatBox.scrollTop = chatBox.scrollHeight;
   } catch (e) {
     console.error("Chat load error:", e);
