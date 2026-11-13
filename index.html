@@ -1172,10 +1172,87 @@ function enterApp() {
   activatePage('home');
 }
 
-document.addEventListener("DOMContentLoaded", function () {
+/* GitHub লিস্ট থেকে আইডি বাদ পড়লে লগইন করা স্টুডেন্টকেও বের করে দেয়।
+   নেটওয়ার্ক/GitHub সমস্যা হলে কাউকে লগআউট করে না। */
+const ID_LIST_URL = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID";
+let lastAccessCheck = 0;
+
+async function verifyStillAllowed(verbose) {
+  /* রিটার্ন: "removed" (আইডি বাদ), "ok" (আছে), "unknown" (যাচাই করা যায়নি) */
+  if (localStorage.getItem("isLoggedIn") !== "true") return "unknown";
+  const id = (localStorage.getItem("userId") || "").trim().toLowerCase();
+  if (!id) return "unknown";
+  if (!navigator.onLine) return "unknown";
+  lastAccessCheck = Date.now();
+
+  let text;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(function () { ctrl.abort(); }, 7000);
+    const res = await fetch(ID_LIST_URL + "?t=" + Date.now(), { cache: "no-store", signal: ctrl.signal });
+    clearTimeout(timer);
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    text = (await res.text()).replace(/^\uFEFF/, "");
+  } catch (e) {
+    if (verbose) notify("আইডি যাচাই করা যায়নি (" + (e && e.message ? e.message : e) + ")", "error");
+    return "unknown";
+  }
+
+  let validLines = 0, row = null;
+  text.split(/\r?\n/).forEach(line => {
+    const parts = line.trim().split(",").map(x => x.trim());
+    if (parts.length >= 6) {
+      validLines++;
+      if (!row && parts[0].toLowerCase() === id) row = parts;
+    }
+  });
+  if (validLines === 0) {
+    if (verbose) notify("আইডি লিস্ট পড়া যায়নি", "error");
+    return "unknown"; /* ফাইল ফাঁকা/ভাঙা হলে কাউকে বের করবে না */
+  }
+
+  if (!row) {
+    /* আইডি বাদ পড়েছে: সেশন শেষ */
+    sessionStorage.setItem("accessRevoked", "1");
+    clearSessionKeepDevice();
+    location.reload();
+    return "removed";
+  }
+
+  /* আইডি আছে: নাম, ব্যাচ ও চ্যাপ্টার অ্যাক্সেস হালনাগাদ */
+  localStorage.setItem("userName", row[1]);
+  localStorage.setItem("userBatch", row[2]);
+  localStorage.setItem("userCollege", row[3]);
+  localStorage.setItem("userResult", row[4]);
+  localStorage.setItem("userAllowedChapters", JSON.stringify(row.slice(5)));
+  renderProfile();
+  applyAccessState();
+  return "ok";
+}
+
+function maybeVerify() {
+  if (document.visibilityState === "visible" && Date.now() - lastAccessCheck > 30 * 1000) {
+    verifyStillAllowed();
+  }
+}
+document.addEventListener("visibilitychange", maybeVerify);
+window.addEventListener("focus", maybeVerify);
+window.addEventListener("pageshow", function (ev) { if (ev.persisted) verifyStillAllowed(); });
+setInterval(maybeVerify, 60 * 1000);
+
+document.addEventListener("DOMContentLoaded", async function () {
+  if (sessionStorage.getItem("accessRevoked") === "1") {
+    sessionStorage.removeItem("accessRevoked");
+    setTimeout(function () { notify("আপনার অ্যাক্সেস বন্ধ করা হয়েছে। যোগাযোগ করুন: +8801612296263", "error"); }, 400);
+  }
   if (localStorage.getItem("isLoggedIn") === "true") {
     renderProfile();
-    enterApp();
+    /* প্রতিবার রিফ্রেশে GitHub থেকে আইডি যাচাই শেষ না হওয়া পর্যন্ত অ্যাপ খুলবে না */
+    const loginEl = document.getElementById('login-screen');
+    if (loginEl) loginEl.style.visibility = 'hidden';
+    const result = await verifyStillAllowed(true);
+    if (result !== "removed") enterApp();
+    if (loginEl) loginEl.style.visibility = '';
   }
   applyAccessState();
   const idField = document.getElementById('userid');
@@ -1193,19 +1270,9 @@ async function saveData() {
 
   try {
     step = 'GitHub ID list';
-    var idSources = [
-      githubUrl,
-      "https://cdn.jsdelivr.net/gh/cdservicebd-coder/new-id@main/New%20ID?t=" + new Date().getTime()
-    ];
-    var text = null, lastErr = null;
-    for (var si = 0; si < idSources.length && text === null; si++) {
-      try {
-        var response = await fetch(idSources[si], { cache: 'no-store' });
-        if (!response.ok) throw new Error('HTTP ' + response.status);
-        text = await response.text();
-      } catch (fe) { lastErr = fe; }
-    }
-    if (text === null) throw lastErr || new Error('ID list load হয়নি');
+    var response = await fetch(githubUrl, { cache: 'no-store' });
+    if (!response.ok) throw new Error('HTTP ' + response.status);
+    var text = await response.text();
     text = text.replace(/^\uFEFF/, '');
     var lines = text.split(/\r?\n/);
     var isValid = false;
@@ -1278,8 +1345,15 @@ async function saveData() {
   }
 }
 
-function logout() {
+/* লগআউটে ডিভাইস আইডি রেখে বাকি সব মুছে ফেলে, নইলে একই ফোনে আবার লগইনে "অন্য ডিভাইস" ব্লক আসে */
+function clearSessionKeepDevice() {
+  const dev = localStorage.getItem("device_uuid");
   localStorage.clear();
+  if (dev) localStorage.setItem("device_uuid", dev);
+}
+
+function logout() {
+  clearSessionKeepDevice();
   location.reload();
 }
 
