@@ -150,6 +150,8 @@ img{max-width:100%}
 .nav-item.is-active{color:var(--primary);font-weight:600}
 .nav-item.is-active .nav-pill{background:var(--primary-soft)}
 .dot{display:none;position:absolute;top:0;left:calc(50% + 8px);width:11px;height:11px;border-radius:50%;background:#E5484D;border:2px solid var(--surface);z-index:2}
+#chat-fab .dot{top:-3px;left:auto;right:-2px;width:14px;height:14px;border-color:var(--bg)}
+.tab-dot{display:none;width:9px;height:9px;margin-left:7px;border-radius:50%;background:#E5484D;border:2px solid var(--surface);vertical-align:middle;box-sizing:content-box}
 
 /* Floating chat button */
 #chat-fab{position:fixed;right:16px;bottom:calc(var(--nav-h) + 16px + var(--safe-bottom));z-index:999;display:flex;align-items:center;gap:8px;
@@ -366,7 +368,7 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
 
 <!-- Floating chat button -->
 <button id="chat-fab" onclick="show('chat-portal')" aria-label="Messages">
-  <svg class="ic " aria-hidden="true"><use href="#i-chat"/></svg><span>Messages</span>
+  <span id="chat-dot" class="dot"></span><svg class="ic " aria-hidden="true"><use href="#i-chat"/></svg><span>Messages</span>
 </button>
 
 <!-- ================= CHAT PORTAL ================= -->
@@ -918,7 +920,7 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
   <div class="content">
     <div class="qa-tabs">
       <button class="qa-tab active" onclick="showQATab('ask', this)">Question</button>
-      <button class="qa-tab" onclick="showQATab('check', this)">Answer</button>
+      <button class="qa-tab" onclick="showQATab('check', this)">Answer<span id="qa-tab-dot" class="tab-dot"></span></button>
     </div>
 
     <div id="qa-ask" class="qa-tab-content active">
@@ -967,7 +969,7 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
 <nav class="bottom-nav">
   <div class="nav-item is-active" data-nav="home" onclick="show('home')"><span class="nav-pill"><svg class="ic " aria-hidden="true"><use href="#i-home"/></svg></span><span>Home</span></div>
   <div class="nav-item" data-nav="notice" onclick="show('notice')"><span id="notice-dot" class="dot"></span><span class="nav-pill"><svg class="ic " aria-hidden="true"><use href="#i-bell"/></svg></span><span>Notice</span></div>
-  <div class="nav-item" data-nav="qa-portal" onclick="show('qa-portal')"><span class="nav-pill"><svg class="ic " aria-hidden="true"><use href="#i-forum"/></svg></span><span>Q&amp;A</span></div>
+  <div class="nav-item" data-nav="qa-portal" onclick="show('qa-portal')"><span id="qa-dot" class="dot"></span><span class="nav-pill"><svg class="ic " aria-hidden="true"><use href="#i-forum"/></svg></span><span>Q&amp;A</span></div>
   <div class="nav-item" data-nav="profile" onclick="show('profile')"><span class="nav-pill"><svg class="ic " aria-hidden="true"><use href="#i-person"/></svg></span><span>Profile</span></div>
 </nav>
 
@@ -1251,7 +1253,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     const loginEl = document.getElementById('login-screen');
     if (loginEl) loginEl.style.visibility = 'hidden';
     const result = await verifyStillAllowed(true);
-    if (result !== "removed") enterApp();
+    if (result !== "removed") { enterApp(); checkNotifications(true); }
     if (loginEl) loginEl.style.visibility = '';
   }
   applyAccessState();
@@ -1336,6 +1338,7 @@ async function saveData() {
     renderProfile();
     applyAccessState();
     enterApp();
+    checkNotifications(true);
 
   } catch (error) {
     console.error(error);
@@ -1530,6 +1533,7 @@ function loadAnswers() {
   fetch(`${SCRIPT_URL}?action=getStudentQA&id=${encodeURIComponent(student.id)}`)
   .then(res => res.json())
   .then(data => {
+    if (Array.isArray(data)) markNotifSeen('qa', answeredKeys(data));
     if (!Array.isArray(data) || data.length === 0) {
       listDiv.innerHTML = '<p class="qa-msg">তোমার কোনো প্রশ্ন বা উত্তর পাওয়া যায়নি।</p>';
       return;
@@ -1585,6 +1589,107 @@ function loadAnswers() {
   });
 }
 
+/* ==================== Red-dot notifications ====================
+   Q&A: শিক্ষক উত্তর দিলে Q&A-তে লাল ডট।  Chat: ব্যাচ গ্রুপে অন্য কারো নতুন মেসেজ এলে Messages-এ লাল ডট।
+   ডট তখনই যায় যখন স্টুডেন্ট সেই উত্তর/মেসেজ স্ক্রিনে দেখে (Answer ট্যাব / চ্যাট খুললে)।
+   নতুন কিছু না এলে ডট আর ফেরে না। */
+function hashStr(s) {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+function answeredKeys(list) {
+  return list.filter(i => String(i.answer || "").trim() !== "")
+             .map(i => hashStr(String(i.question || "") + "\u0001" + String(i.answer || "").trim()));
+}
+function chatKey(m) {
+  return hashStr([m.id, m.name, m.time, m.message, m.imageUrl].map(v => String(v ?? "")).join("\u0001"));
+}
+function isMyMessage(m) {
+  const myId = (localStorage.getItem("userId") || "").trim().toLowerCase();
+  if (m.id !== undefined && m.id !== null && String(m.id).trim() !== "") return String(m.id).trim().toLowerCase() === myId;
+  return String(m.name || "") === (localStorage.getItem("userName") || "");
+}
+function notifStoreKey(kind) {
+  const id = (localStorage.getItem("userId") || "").toLowerCase();
+  return "seen_" + kind + "_" + id + (kind === "chat" ? "_" + (localStorage.getItem("userBatch") || "") : "");
+}
+function getSeen(kind) {
+  try {
+    const v = localStorage.getItem(notifStoreKey(kind));
+    return v === null ? null : new Set(JSON.parse(v));
+  } catch (e) { return null; }
+}
+function setSeen(kind, keys) {
+  try { localStorage.setItem(notifStoreKey(kind), JSON.stringify(keys.slice(-300))); } catch (e) {}
+}
+function setDots(kind, on) {
+  const ids = kind === "qa" ? ["qa-dot", "qa-tab-dot"] : ["chat-dot"];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = on ? (el.classList.contains("tab-dot") ? "inline-block" : "block") : "none";
+  });
+}
+function markNotifSeen(kind, keys) {
+  setSeen(kind, keys);
+  setDots(kind, false);
+}
+
+/* items: [{key, mine}] — baseline (প্রথমবার) হলে পুরোনোগুলো নতুন ধরা হয় না */
+function applyNotif(kind, items) {
+  const seen = getSeen(kind);
+  if (seen === null) { setSeen(kind, items.map(i => i.key)); setDots(kind, false); return; }
+  const hasNew = items.some(i => !i.mine && !seen.has(i.key));
+  if (!hasNew) { setDots(kind, false); return; }
+
+  const page = document.body.getAttribute("data-page");
+  if (kind === "qa" && page === "qa-portal" && document.getElementById("qa-check").classList.contains("active")) {
+    loadAnswers();          /* স্টুডেন্ট এখন Answer ট্যাবেই আছে: দেখিয়ে দাও, ডট লাগবে না */
+  } else if (kind === "chat" && page === "chat-portal") {
+    loadBatchMessages();    /* স্টুডেন্ট এখন চ্যাটেই আছে */
+  } else {
+    setDots(kind, true);
+  }
+}
+
+async function pollQA() {
+  const id = localStorage.getItem("userId");
+  if (!id) return;
+  try {
+    const res = await fetch(`${SCRIPT_URL}?action=getStudentQA&id=${encodeURIComponent(id)}`, { cache: "no-store" });
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    const answered = answeredKeys(data);
+    applyNotif("qa", answered.map(k => ({ key: k, mine: false })));
+  } catch (e) { /* নেটওয়ার্ক সমস্যায় ডটের অবস্থা বদলাবে না */ }
+}
+
+async function pollChat() {
+  const batch = localStorage.getItem("userBatch") || "";
+  if (!batch) return;
+  try {
+    const res = await fetch(`${CHAT_SCRIPT_URL}?action=getMessages&batch=${encodeURIComponent(batch)}`, { cache: "no-store" });
+    const data = await res.json();
+    if (!Array.isArray(data)) return;
+    applyNotif("chat", data.map(m => ({ key: chatKey(m), mine: isMyMessage(m) })));
+  } catch (e) { /* ignore */ }
+}
+
+let notifBusy = false, lastNotifCheck = 0;
+async function checkNotifications(force) {
+  if (notifBusy) return;
+  if (localStorage.getItem("isLoggedIn") !== "true" || !localStorage.getItem("userId")) return;
+  if (!navigator.onLine || document.visibilityState !== "visible") return;
+  if (!force && Date.now() - lastNotifCheck < 20 * 1000) return;
+  notifBusy = true;
+  lastNotifCheck = Date.now();
+  try { await Promise.all([pollQA(), pollChat()]); }
+  finally { notifBusy = false; }
+}
+document.addEventListener("visibilitychange", function () { checkNotifications(); });
+window.addEventListener("focus", function () { checkNotifications(); });
+setInterval(function () { checkNotifications(); }, 60 * 1000);
+
 /* ==================== Chat ==================== */
 async function loadBatchMessages() {
   let batch = localStorage.getItem("userBatch") || "";
@@ -1593,6 +1698,7 @@ async function loadBatchMessages() {
   try {
     let res = await fetch(`${CHAT_SCRIPT_URL}?action=getMessages&batch=${encodeURIComponent(batch)}`);
     let data = await res.json();
+    if (Array.isArray(data)) markNotifSeen('chat', data.map(chatKey));
 
     if (!Array.isArray(data) || data.length === 0) {
       chatBox.innerHTML = '<p class="chat-empty">No message!</p>';
@@ -1670,3 +1776,4 @@ function handleChatKeyPress(event) {
 </script>
 </body>
 </html>
+                                                                 
