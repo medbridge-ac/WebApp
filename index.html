@@ -1080,7 +1080,6 @@ function hasAccess(pageId) {
   return allowed.includes("all") || allowed.includes(pageId);
 }
 
-/* Mark chapters the student cannot open (tap still shows the same message as before) */
 function applyAccessState() {
   document.querySelectorAll('[data-go]').forEach(el => {
     el.classList.toggle('is-locked', !hasAccess(el.getAttribute('data-go')));
@@ -1098,7 +1097,6 @@ function activatePage(pageId) {
   const bottomNav = document.querySelector('.bottom-nav');
   if (bottomNav) bottomNav.style.display = (pageId === 'chat-portal') ? 'none' : 'flex';
 
-  // highlight bottom-nav item (study pages count as Home)
   const navKey = NAV_PAGES.includes(pageId) ? pageId : 'home';
   document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('is-active', n.getAttribute('data-nav') === navKey));
   return true;
@@ -1123,7 +1121,6 @@ function show(pageId, isBack = false) {
   activatePage(pageId);
   localStorage.setItem('currentActivePage', pageId);
 
-  // নোটিশ পেজে গেলে লাল ডট হাইড হবে এবং নোটিশ সিন হয়ে যাবে
   if (pageId === 'notice') {
     document.getElementById('notice-dot').style.display = 'none';
     let currentNotice = document.getElementById('noticeContent').innerText;
@@ -1132,7 +1129,6 @@ function show(pageId, isBack = false) {
     }
   }
 
-  // চ্যাট পেজে গেলে ব্যাচের নাম সেট হবে এবং মেসেজ লোড হবে
   if (pageId === 'chat-portal') {
     let userBatch = localStorage.getItem("userBatch") || "General";
     document.getElementById('chatHeaderTitle').innerText = "Batch: " + userBatch;
@@ -1143,7 +1139,7 @@ function show(pageId, isBack = false) {
     if (pageHistory[pageHistory.length - 1] !== pageId) {
       pageHistory.push(pageId);
     }
-    history.pushState({page: pageId}, "");
+    history.pushState({ page: pageId }, "");
   }
 }
 
@@ -1174,13 +1170,10 @@ function enterApp() {
   activatePage('home');
 }
 
-/* GitHub লিস্ট থেকে আইডি বাদ পড়লে লগইন করা স্টুডেন্টকেও বের করে দেয়।
-   নেটওয়ার্ক/GitHub সমস্যা হলে কাউকে লগআউট করে না। */
 const ID_LIST_URL = "https://raw.githubusercontent.com/cdservicebd-coder/new-id/refs/heads/main/New%20ID";
 let lastAccessCheck = 0;
 
 async function verifyStillAllowed(verbose) {
-  /* রিটার্ন: "removed" (আইডি বাদ), "ok" (আছে), "unknown" (যাচাই করা যায়নি) */
   if (localStorage.getItem("isLoggedIn") !== "true") return "unknown";
   const id = (localStorage.getItem("userId") || "").trim().toLowerCase();
   if (!id) return "unknown";
@@ -1210,18 +1203,16 @@ async function verifyStillAllowed(verbose) {
   });
   if (validLines === 0) {
     if (verbose) notify("আইডি লিস্ট পড়া যায়নি", "error");
-    return "unknown"; /* ফাইল ফাঁকা/ভাঙা হলে কাউকে বের করবে না */
+    return "unknown";
   }
 
   if (!row) {
-    /* আইডি বাদ পড়েছে: সেশন শেষ */
     sessionStorage.setItem("accessRevoked", "1");
     clearSessionKeepDevice();
     location.reload();
     return "removed";
   }
 
-  /* আইডি আছে: নাম, ব্যাচ ও চ্যাপ্টার অ্যাক্সেস হালনাগাদ */
   localStorage.setItem("userName", row[1]);
   localStorage.setItem("userBatch", row[2]);
   localStorage.setItem("userCollege", row[3]);
@@ -1249,7 +1240,6 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
   if (localStorage.getItem("isLoggedIn") === "true") {
     renderProfile();
-    /* প্রতিবার রিফ্রেশে GitHub থেকে আইডি যাচাই শেষ না হওয়া পর্যন্ত অ্যাপ খুলবে না */
     const loginEl = document.getElementById('login-screen');
     if (loginEl) loginEl.style.visibility = 'hidden';
     const result = await verifyStillAllowed(true);
@@ -1305,14 +1295,12 @@ async function saveData() {
       return;
     }
 
-    // ১. এই ব্রাউজার/ফোনের জন্য একটি ইউনিক ডিভাইস আইডি তৈরি বা নেওয়া
     let deviceId = localStorage.getItem("device_uuid");
     if (!deviceId) {
       deviceId = 'dev_' + Math.random().toString(36).substr(2, 9) + Date.now().toString(36);
       localStorage.setItem("device_uuid", deviceId);
     }
 
-    // ২. গুগল শিটে চেক করা যে I কলামে অলরেডি অন্য কোনো ডিভাইস আইডি আছে কিনা
     let checkUrl = `${SCRIPT_URL}?action=checkLogin&id=${encodeURIComponent(idInput)}&deviceId=${encodeURIComponent(deviceId)}`;
     step = 'Google Script (checkLogin)';
     let checkRes = await fetch(checkUrl);
@@ -1326,7 +1314,6 @@ async function saveData() {
       return;
     }
 
-    // ৩. সফল হলে লোকাল স্টোরেজে সেভ করা
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userName", matchedName);
     localStorage.setItem("userId", idInput);
@@ -1348,7 +1335,6 @@ async function saveData() {
   }
 }
 
-/* লগআউটে ডিভাইস আইডি রেখে বাকি সব মুছে ফেলে, নইলে একই ফোনে আবার লগইনে "অন্য ডিভাইস" ব্লক আসে */
 function clearSessionKeepDevice() {
   const dev = localStorage.getItem("device_uuid");
   localStorage.clear();
@@ -1372,7 +1358,6 @@ window.addEventListener('load', function () {
         document.getElementById('noticeBox').style.display = 'flex';
         document.getElementById('noticeEmpty').style.display = 'none';
 
-        // লোকাল স্টোরেজের সাথে মিলিয়ে লাল ডট দেখানো
         let lastSeenNotice = localStorage.getItem('lastSeenNotice');
         if (lastSeenNotice !== data.notice) {
           document.getElementById('notice-dot').style.display = 'block';
@@ -1545,13 +1530,11 @@ function loadAnswers() {
       const isAnswered = answerText !== "";
       let studentImgHtml = "";
 
-      // স্টুডেন্টের নিজের আপলোড করা ছবি
       if (item.imageUrl) {
         const sImg = driveImageUrl(item.imageUrl);
         studentImgHtml = `<a href="${escapeQAHTML(item.imageUrl)}" target="_blank" rel="noopener noreferrer"><img src="${escapeQAHTML(sImg)}" alt="Question image"></a>`;
       }
 
-      // শিক্ষকের উত্তরের টেক্সট থেকে লিংক খুঁজে ছবি আকারে দেখানো
       let formattedAnswer = escapeQAHTML(answerText);
       const urlRegex = /(https?:\/\/[^\s]+)/g;
       formattedAnswer = formattedAnswer.replace(urlRegex, function (url) {
@@ -1575,7 +1558,6 @@ function loadAnswers() {
     });
     listDiv.innerHTML = html;
 
-    // ছবি লোড না হলে লিংক হিসেবে দেখানো
     listDiv.querySelectorAll('.qa-item img').forEach(img => {
       img.addEventListener('error', function () {
         const a = img.closest('a');
@@ -1589,10 +1571,7 @@ function loadAnswers() {
   });
 }
 
-/* ==================== Red-dot notifications ====================
-   Q&A: শিক্ষক উত্তর দিলে Q&A-তে লাল ডট।  Chat: ব্যাচ গ্রুপে অন্য কারো নতুন মেসেজ এলে Messages-এ লাল ডট।
-   ডট তখনই যায় যখন স্টুডেন্ট সেই উত্তর/মেসেজ স্ক্রিনে দেখে (Answer ট্যাব / চ্যাট খুললে)।
-   নতুন কিছু না এলে ডট আর ফেরে না। */
+/* ==================== Notifications (Red-dot + Toast) ==================== */
 function hashStr(s) {
   let h = 5381;
   for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
@@ -1635,7 +1614,6 @@ function markNotifSeen(kind, keys) {
   setDots(kind, false);
 }
 
-/* items: [{key, mine}] — baseline (প্রথমবার) হলে পুরোনোগুলো নতুন ধরা হয় না */
 function applyNotif(kind, items) {
   const seen = getSeen(kind);
   if (seen === null) { setSeen(kind, items.map(i => i.key)); setDots(kind, false); return; }
@@ -1644,13 +1622,16 @@ function applyNotif(kind, items) {
 
   const page = document.body.getAttribute("data-page");
   if (kind === "qa" && page === "qa-portal" && document.getElementById("qa-check").classList.contains("active")) {
-    loadAnswers();          /* স্টুডেন্ট এখন Answer ট্যাবেই আছে: দেখিয়ে দাও, ডট লাগবে না */
+    loadAnswers();
   } else if (kind === "chat" && page === "chat-portal") {
-    loadBatchMessages();    /* স্টুডেন্ট এখন চ্যাটেই আছে */
+    loadBatchMessages();
   } else {
     setDots(kind, true);
   }
 }
+
+let qaNotifiedOnce = false;
+let chatNotifiedOnce = false;
 
 async function pollQA() {
   const id = localStorage.getItem("userId");
@@ -1659,9 +1640,20 @@ async function pollQA() {
     const res = await fetch(`${SCRIPT_URL}?action=getStudentQA&id=${encodeURIComponent(id)}`, { cache: "no-store" });
     const data = await res.json();
     if (!Array.isArray(data)) return;
+
     const answered = answeredKeys(data);
+    const seen = getSeen("qa");
+
+    if (seen !== null && qaNotifiedOnce) {
+      const newCount = answered.filter(k => !seen.has(k)).length;
+      if (newCount > 0) {
+        notify(`✅ আপনার প্রশ্নের ${newCount}টি নতুন উত্তর এসেছে!`, "success");
+      }
+    }
+    qaNotifiedOnce = true;
+
     applyNotif("qa", answered.map(k => ({ key: k, mine: false })));
-  } catch (e) { /* নেটওয়ার্ক সমস্যায় ডটের অবস্থা বদলাবে না */ }
+  } catch (e) {}
 }
 
 async function pollChat() {
@@ -1671,8 +1663,23 @@ async function pollChat() {
     const res = await fetch(`${CHAT_SCRIPT_URL}?action=getMessages&batch=${encodeURIComponent(batch)}`, { cache: "no-store" });
     const data = await res.json();
     if (!Array.isArray(data)) return;
-    applyNotif("chat", data.map(m => ({ key: chatKey(m), mine: isMyMessage(m) })));
-  } catch (e) { /* ignore */ }
+
+    const seen = getSeen("chat");
+    const items = data.map(m => ({ key: chatKey(m), mine: isMyMessage(m), raw: m }));
+
+    if (seen !== null && chatNotifiedOnce) {
+      const newOthers = items.filter(i => !i.mine && !seen.has(i.key));
+      if (newOthers.length > 0) {
+        const lastMsg = newOthers[newOthers.length - 1].raw;
+        const sender = lastMsg.name || "কেউ";
+        const preview = lastMsg.message ? `: ${lastMsg.message}` : (lastMsg.imageUrl ? " (ছবি)" : "");
+        notify(`💬 ${sender}${preview}`, "success");
+      }
+    }
+    chatNotifiedOnce = true;
+
+    applyNotif("chat", items.map(i => ({ key: i.key, mine: i.mine })));
+  } catch (e) {}
 }
 
 let notifBusy = false, lastNotifCheck = 0;
