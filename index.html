@@ -1378,6 +1378,7 @@ async function saveData() {
     renderProfile();
     applyAccessState();
     enterApp();
+    if (typeof askPushPermission === "function") askPushPermission();
     checkNotifications(true);
 
   } catch (error) {
@@ -1388,6 +1389,7 @@ async function saveData() {
   }
 }
 
+  
 /* লগআউটে ডিভাইস আইডি রেখে বাকি সব মুছে ফেলে, নইলে একই ফোনে আবার লগইনে "অন্য ডিভাইস" ব্লক আসে */
 function clearSessionKeepDevice() {
   const dev = localStorage.getItem("device_uuid");
