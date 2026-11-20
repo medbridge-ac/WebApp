@@ -317,6 +317,31 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
 
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
+  /* ============ Notification Part ============ */
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  let osReady = false;
+
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "fb52b6f3-77de-4826-9e43-fe75f1679f9f"
+    });
+    osReady = true;
+    syncOneSignalBatchTag();
+  });
+
+  function syncOneSignalBatchTag() {
+    if (!osReady) return;
+    const batch = (localStorage.getItem("userBatch") || "").trim();
+    if (!batch) return;
+
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.User.addTag("batch", batch);
+    });
+  }
+</script>
+  
 </head>
 <body>
 
@@ -1167,6 +1192,7 @@ function renderProfile() {
   set('profileHeadName', name || "Student Profile");
   set('avatarInitial', (name.trim().charAt(0) || "S").toUpperCase());
   set('homeName', name || "Student");
+  syncOneSignalBatchTag();
 }
 
 function enterApp() {
