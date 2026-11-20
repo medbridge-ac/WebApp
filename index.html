@@ -345,6 +345,15 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
       await OneSignal.User.addTag("batch", batch);
     });
   }
+
+  function askPushPermission() {
+    OneSignalDeferred.push(async function(OneSignal) {
+      if (!OneSignal.Notifications.permission) {
+        await OneSignal.Notifications.requestPermission();
+      }
+      syncOneSignalBatchTag();
+    });
+  }
 </script>
   
 </head>
