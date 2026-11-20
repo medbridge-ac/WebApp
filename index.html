@@ -328,6 +328,8 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
     await OneSignal.init({
       appId: "fb52b6f3-77de-4826-9e43-fe75f1679f9f",
       safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      serviceWorkerParam: { scope: "/WebApp/" },
+      serviceWorkerPath: "/WebApp/OneSignalSDKWorker.js",
       notifyButton: {
         enable: false,
       },
@@ -335,25 +337,6 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
     osReady = true;
     syncOneSignalBatchTag();
   });
-
-  function syncOneSignalBatchTag() {
-    if (!osReady) return;
-    const batch = (localStorage.getItem("userBatch") || "").trim();
-    if (!batch) return;
-
-    OneSignalDeferred.push(async function(OneSignal) {
-      await OneSignal.User.addTag("batch", batch);
-    });
-  }
-
-  function askPushPermission() {
-    OneSignalDeferred.push(async function(OneSignal) {
-      if (!OneSignal.Notifications.permission) {
-        await OneSignal.Notifications.requestPermission();
-      }
-      syncOneSignalBatchTag();
-    });
-  }
 </script>
   
 </head>
