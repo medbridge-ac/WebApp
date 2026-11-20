@@ -319,14 +319,18 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
 </style>
 
   
-  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+ <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <script>
   window.OneSignalDeferred = window.OneSignalDeferred || [];
   let osReady = false;
 
   OneSignalDeferred.push(async function(OneSignal) {
     await OneSignal.init({
-      appId: "fb52b6f3-77de-4826-9e43-fe75f1679f9f"
+      appId: "fb52b6f3-77de-4826-9e43-fe75f1679f9f",
+      safari_web_id: "web.onesignal.auto.261dc44c-6b5c-4882-ba5f-51ef0736d918",
+      notifyButton: {
+        enable: true,
+      },
     });
     osReady = true;
     syncOneSignalBatchTag();
