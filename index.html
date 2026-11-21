@@ -1394,26 +1394,32 @@ async function saveData() {
 }
 
   
-async function logout() {
+function logout() {
+  var done = false;
+  function finish() {
+    if (done) return;
+    done = true;
+    clearSessionKeepDevice();
+    location.reload();
+  }
+
+  // OneSignal সাড়া না দিলেও সর্বোচ্চ ২.৫ সেকেন্ড পর লগআউট হবেই
+  setTimeout(finish, 2500);
+
   try {
-    if (osReady) {
-      await Promise.race([
-        new Promise(function (resolve) {
-          OneSignalDeferred.push(async function (OneSignal) {
-            try {
-              await OneSignal.User.removeTags(["batch", "student_id"]);
-            } catch (e) {}
-            resolve();
-          });
-        }),
-        new Promise(function (resolve) { setTimeout(resolve, 3000); }) // সর্বোচ্চ ৩ সেকেন্ড
-      ]);
-      // ট্যাগ সার্ভারে পৌঁছানোর জন্য একটু সময় দিন
-      await new Promise(function (resolve) { setTimeout(resolve, 1500); });
+    if (typeof osReady !== "undefined" && osReady) {
+      OneSignalDeferred.push(async function (OneSignal) {
+        try {
+          await OneSignal.User.removeTags(["batch", "student_id"]);
+        } catch (e) {}
+        setTimeout(finish, 1000); // ট্যাগ সার্ভারে যাওয়ার জন্য একটু সময়
+      });
+    } else {
+      finish();
     }
-  } catch (e) {}
-  clearSessionKeepDevice();
-  location.reload();
+  } catch (e) {
+    finish();
+  }
 }
 /* ==================== Notice ==================== */
 window.addEventListener('load', function () {
