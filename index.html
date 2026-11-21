@@ -1393,7 +1393,12 @@ async function saveData() {
   }
 }
 
-  
+  /* লগআউটে ডিভাইস আইডি রেখে বাকি সব মুছে ফেলে, নইলে একই ফোনে আবার লগইনে "অন্য ডিভাইস" ব্লক আসে */
+function clearSessionKeepDevice() {
+  const dev = localStorage.getItem("device_uuid");
+  localStorage.clear();
+  if (dev) localStorage.setItem("device_uuid", dev);
+}
 function logout() {
   var done = false;
   function finish() {
