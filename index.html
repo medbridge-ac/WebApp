@@ -337,6 +337,25 @@ body[data-page="chat-portal"] #toast{bottom:calc(90px + var(--safe-bottom))}
     osReady = true;
     syncOneSignalBatchTag();
   });
+
+  function syncOneSignalBatchTag() {
+    if (!osReady) return;
+    const batch = (localStorage.getItem("userBatch") || "").trim();
+    if (!batch) return;
+
+    OneSignalDeferred.push(async function(OneSignal) {
+      await OneSignal.User.addTag("batch", batch);
+    });
+  }
+
+  function askPushPermission() {
+    OneSignalDeferred.push(async function(OneSignal) {
+      if (!OneSignal.Notifications.permission) {
+        await OneSignal.Notifications.requestPermission();
+      }
+      syncOneSignalBatchTag();
+    });
+  }
 </script>
   
 </head>
